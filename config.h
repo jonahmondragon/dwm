@@ -205,8 +205,10 @@ static Key keys[] = {
 	{ MODKEY,			XK_l,		setmfact,      	{.f = +0.05} },
 	{ MODKEY,			XK_period,	shiftview,	{ .i = 1 } },
 	{ MODKEY|ShiftMask,		XK_period,	shifttag,	{ .i = 1 } },
+	{ MODKEY|ControlMask,		XK_period,			spawn, SHCMD("mpc next") },
 	{ MODKEY,			XK_comma,		shiftview,	{ .i = -1 } },
 	{ MODKEY|ShiftMask,		XK_comma,		shifttag,	{ .i = -1 } },
+	{ MODKEY|ControlMask,		XK_comma,			spawn, SHCMD("mpc prev") },
 	{ MODKEY,			XK_apostrophe,	togglescratch,	{.ui = 1} },
 	/* { MODKEY|ShiftMask,		XK_apostrophe,	spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_Return,	spawn,		{.v = termcmd } },
