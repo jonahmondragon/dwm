@@ -200,7 +200,6 @@ static Key keys[] = {
 	/* { MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_d,		spawn,          SHCMD("dmenu_run") },
 	//{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
-    { MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("disconnect_bluetooth") },
 	{ MODKEY,			XK_f,		togglefullscr,	{0} },
 	{ MODKEY|ShiftMask,		XK_f,		setlayout,	{.v = &layouts[8]} },
 	{ MODKEY,			XK_h,		setmfact,	{.f = -0.05} },
@@ -221,11 +220,10 @@ static Key keys[] = {
 	/* { MODKEY|ShiftMask,		XK_z,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_x,		incrgaps,	{.i = -3 } },
 	/* { MODKEY|ShiftMask,		XK_x,		spawn,		SHCMD("") }, */
-	/* { MODKEY,			XK_c,		spawn,		SHCMD("") }, */
-	/* { MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("") }, */
+     { MODKEY,			XK_c,		spawn,		SHCMD("connect_bluetooth") }, 
+     { MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("disconnect_bluetooth") }, 
 	/* V is automatically bound above in STACKKEYS */
 	{ MODKEY,			XK_b,		togglebar,	{0} },
-    { MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD("connect_bluetooth") }, 
 	{ MODKEY,			XK_n,		spawn,		SHCMD(TERMINAL " -e nvim -c VimwikiIndex") },
 	{ MODKEY|ShiftMask,		XK_n,		spawn,		SHCMD(TERMINAL " -e newsboat; pkill -RTMIN+6 dwmblocks") },
     { MODKEY|ShiftMask|ControlMask,                       XK_n,      togglealttag,   {0} },
