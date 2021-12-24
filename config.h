@@ -199,7 +199,8 @@ static Key keys[] = {
 	{ MODKEY,			XK_s,		togglesticky,	{0} },
 	/* { MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_d,		spawn,          SHCMD("dmenu_run") },
-	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
+	//{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
+    { MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("disconnect_bluetooth") },
 	{ MODKEY,			XK_f,		togglefullscr,	{0} },
 	{ MODKEY|ShiftMask,		XK_f,		setlayout,	{.v = &layouts[8]} },
 	{ MODKEY,			XK_h,		setmfact,	{.f = -0.05} },
@@ -224,7 +225,7 @@ static Key keys[] = {
 	/* { MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("") }, */
 	/* V is automatically bound above in STACKKEYS */
 	{ MODKEY,			XK_b,		togglebar,	{0} },
-    { MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD(TERMINAL " -e bluetoothctl") }, 
+    { MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD("connect_bluetooth") }, 
 	{ MODKEY,			XK_n,		spawn,		SHCMD(TERMINAL " -e nvim -c VimwikiIndex") },
 	{ MODKEY|ShiftMask,		XK_n,		spawn,		SHCMD(TERMINAL " -e newsboat; pkill -RTMIN+6 dwmblocks") },
     { MODKEY|ShiftMask|ControlMask,                       XK_n,      togglealttag,   {0} },
