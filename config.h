@@ -34,10 +34,12 @@ typedef struct {
 } Sp;
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "monospace:size=16", "-g", "50x20", "-e", "bc", "-lq", NULL };
+const char *spcmd3[] = {TERMINAL, "-n", "pulsemixer", "-f", "monospace:size=9", "-g", "100x30", "-e", "pulsemixer", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
 	{"spcalc",      spcmd2},
+	{"pulsemixer",      spcmd3},
 };
 
 /* tagging */
@@ -57,7 +59,7 @@ static const Rule rules[] = {
 	{ NULL,       NULL,       "Event Tester",         0,            0,           0,         1,        -1 },
 	{ NULL,      "spterm",    NULL,       	    SPTAG(0),     1,           1,         0,        -1 },
 	{ NULL,      "spcalc",    NULL,       	    SPTAG(1),     1,           1,         0,        -1 },
-};
+	{ TERMCLASS,  NULL,       "pulsemixer",     SPTAG(2),     1,           1,         0,        -1 }, };
 
 /* layout(s) */
 static float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
@@ -239,13 +241,13 @@ static Key keys[] = {
 	{ MODKEY,			XK_F1,		spawn,		SHCMD("groff -mom /usr/local/share/dwm/larbs.mom -Tpdf | zathura -") },
 	{ MODKEY,			XK_F2,		spawn,		SHCMD("tutorialvids") },
 	//{ MODKEY,			XK_F3,		spawn,		SHCMD("displayselect") },
-	{ MODKEY,			XK_F4,		spawn,		SHCMD(TERMINAL " -e pulsemixer; kill -44 $(pidof dwmblocks)") },
+	{ MODKEY,			XK_F4,	togglescratch,	{.ui = 2} },
 	/* { MODKEY,			XK_F5,		xrdb,		{.v = NULL } }, */
 	{ MODKEY,			XK_F6,		spawn,		SHCMD("torwrap") },
 	//{ MODKEY,			XK_F7,		spawn,		SHCMD("") },
 	{ MODKEY,			XK_F8,		spawn,		SHCMD("mw -Y") },
-    { MODKEY,			XK_F9,		spawn,		SHCMD("sudo suspend_mode_toggle") },
-	//{ MODKEY,			XK_F10,		spawn,		SHCMD("dmenuumount") },
+    //{ MODKEY,			XK_F9,		spawn,		SHCMD("") },
+	//{ MODKEY,			XK_F10,		spawn,		SHCMD("") },
 	{ MODKEY,			XK_F11,		spawn,		SHCMD("webcam") },
 	{ MODKEY,			XK_F12,		spawn,		SHCMD("remaps & notify-send \\\"⌨️ Keyboard remapping...\\\" \\\"Re-running keyboard defaults for any newly plugged-in keyboards.\\\"") },
 	{ MODKEY,			XK_space,	zoom,		{0} },
@@ -260,6 +262,7 @@ static Key keys[] = {
 
 	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
 	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
+	{ 0,			    XK_End,	spawn,		SHCMD("sudo suspend_mode_toggle")},
 	//{ MODKEY,			XK_Prior,	spawn,		SHCMD("")},
 	//{ MODKEY,			XK_Next,	spawn,		SHCMD("")},
 
