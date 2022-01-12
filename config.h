@@ -294,7 +294,7 @@ static Key keys[] = {
 	{ 0, XF86XK_TouchpadOn,		spawn,		SHCMD("synclient TouchpadOff=0") },
 	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("brightness up") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("brightness down") },
-	{ 0, XF86XK_RotateWindows,	spawn,		SHCMD("thinkpad-rotate flip") },
+	{ 0, XF86XK_RotateWindows,	spawn,		SHCMD("rotate-screen") },
 
 
 	/* { MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } }, */
