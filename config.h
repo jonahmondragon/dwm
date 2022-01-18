@@ -35,11 +35,13 @@ typedef struct {
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "monospace:size=16", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = {TERMINAL, "-n", "pulsemixer", "-f", "monospace:size=9", "-g", "100x30", "-e", "pulsemixer", NULL };
+const char *spcmd4[] = {"sudo", TERMINAL, "-n", "BpyTOP", "-f", "monospace:size=9", "-g", "120x34", "-e", "bpytop", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
 	{"spcalc",      spcmd2},
-	{"pulsemixer",      spcmd3},
+	{"pulsemixer",  spcmd3},
+	{"bpytop",      spcmd4},
 };
 
 /* tagging */
@@ -59,7 +61,8 @@ static const Rule rules[] = {
 	{ NULL,       NULL,       "Event Tester",         0,            0,           0,         1,        -1 },
 	{ NULL,      "spterm",    NULL,       	    SPTAG(0),     1,           1,         0,        -1 },
 	{ NULL,      "spcalc",    NULL,       	    SPTAG(1),     1,           1,         0,        -1 },
-	{ TERMCLASS,  NULL,       "pulsemixer",     SPTAG(2),     1,           1,         0,        -1 }, };
+	{ TERMCLASS,  NULL,       "pulsemixer",     SPTAG(2),     1,           1,         0,        -1 },
+	{ TERMCLASS, "BpyTOP",       NULL,         SPTAG(3),     1,           1,         0,        -1 }, };
 
 /* layout(s) */
 static float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
@@ -166,11 +169,11 @@ static Key keys[] = {
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY|ShiftMask,		XK_q,		spawn,		SHCMD("sysact") },
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD(TERMINAL " -e sudo nmtui") },
+	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("networkmanager_dmenu") },
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
 	{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
     { MODKEY,			XK_r,		spawn,		SHCMD("torwrap") },
-	{ MODKEY|ShiftMask,		XK_r,		spawn,		SHCMD(TERMINAL " -e bpytop") },
+	{ MODKEY|ShiftMask,			XK_r,	    togglescratch,	{.ui = 3} },
 	{ MODKEY,			XK_t,		setlayout,	{.v = &layouts[0]} }, /* tile */
 	{ MODKEY|ShiftMask,		XK_t,		setlayout,	{.v = &layouts[1]} }, /* bstack */
 	{ MODKEY,			XK_y,		setlayout,	{.v = &layouts[2]} }, /* spiral */
@@ -262,6 +265,7 @@ static Key keys[] = {
 
 	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
 	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
+	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
 	{ 0,			    XK_End,	spawn,		SHCMD("sudo suspend_mode_toggle")},
 	//{ MODKEY,			XK_Prior,	spawn,		SHCMD("")},
 	//{ MODKEY,			XK_Next,	spawn,		SHCMD("")},
@@ -294,7 +298,7 @@ static Key keys[] = {
 	{ 0, XF86XK_TouchpadOn,		spawn,		SHCMD("synclient TouchpadOff=0") },
 	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("brightness up") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("brightness down") },
-	{ 0, XF86XK_RotateWindows,	spawn,		SHCMD("rotate-screen") },
+	{ 0, XF86XK_RotateWindows,	spawn,		SHCMD("sleep 2s ; rotate-screen") },
 
 
 	/* { MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } }, */
