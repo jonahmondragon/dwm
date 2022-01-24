@@ -171,7 +171,8 @@ static Key keys[] = {
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("networkmanager_dmenu") },
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
-	{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
+    { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us") },
+	//{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
     { MODKEY,			XK_r,		spawn,		SHCMD("torwrap") },
 	{ MODKEY|ShiftMask,			XK_r,	    togglescratch,	{.ui = 3} },
 	{ MODKEY,			XK_t,		setlayout,	{.v = &layouts[0]} }, /* tile */
@@ -261,6 +262,7 @@ static Key keys[] = {
 	{ MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
 	{ MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
 	{ MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
+	{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("timeout_toggle") },
 	{ MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
 
 	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
