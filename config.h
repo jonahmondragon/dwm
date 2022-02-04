@@ -171,7 +171,11 @@ static Key keys[] = {
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("networkmanager_dmenu") },
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
+<<<<<<< Updated upstream
     { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us ; remaps") },
+=======
+    { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us") },
+>>>>>>> Stashed changes
 	//{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
     { MODKEY,			XK_r,		spawn,		SHCMD("torwrap") },
 	{ MODKEY|ShiftMask,			XK_r,	    togglescratch,	{.ui = 3} },
