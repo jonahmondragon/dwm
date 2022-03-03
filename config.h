@@ -45,7 +45,7 @@ static Sp scratchpads[] = {
 };
 
 /* tagging */
-static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13,", "14", "15", "16", "17", "18", "19", "20", "21" };
+static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21" };
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13,", "14", "15", "16", "17", "18", "19", "20", "21" };
 static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
 
@@ -155,17 +155,17 @@ static Key keys[] = {
 	TAGKEYS(			XK_8,		7)
 	TAGKEYS(			XK_9,		8)
 	TAGKEYS(			XK_F1,		9)
-	TAGKEYS(			XK_F2,		11)
-	TAGKEYS(			XK_F3,		12)
-	TAGKEYS(			XK_F4,		13)
-	TAGKEYS(			XK_F5,		14)
-	TAGKEYS(			XK_F6,		15)
-	TAGKEYS(			XK_F7,		16)
-	TAGKEYS(			XK_F8,		17)
-	TAGKEYS(			XK_F9,		18)
-	TAGKEYS(			XK_F10,		19)
-	TAGKEYS(			XK_F11,		20)
-	TAGKEYS(			XK_F12,		21)
+	TAGKEYS(			XK_F2,		10)
+	TAGKEYS(			XK_F3,		11)
+	TAGKEYS(			XK_F4,		12)
+	TAGKEYS(			XK_F5,		13)
+	TAGKEYS(			XK_F6,		14)
+	TAGKEYS(			XK_F7,		15)
+	TAGKEYS(			XK_F8,		16)
+	TAGKEYS(			XK_F9,		17)
+	TAGKEYS(			XK_F10,		18)
+	TAGKEYS(			XK_F11,		19)
+	TAGKEYS(			XK_F12,		20)
 	{ MODKEY,			XK_0,		view,		{.ui = ~0 } },
 	{ MODKEY|ShiftMask,		XK_0,		tag,		{.ui = ~0 } },
 	{ MODKEY,			XK_minus,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
