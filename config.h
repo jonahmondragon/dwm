@@ -48,6 +48,7 @@ static Sp scratchpads[] = {
 static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21" };
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13,", "14", "15", "16", "17", "18", "19", "20", "21" };
 static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
+static const char *defaulttagapps[] = { "st", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -214,7 +215,8 @@ static Key keys[] = {
 
 	{ MODKEY,			XK_a,		togglegaps,	{0} },
 	{ MODKEY|ShiftMask,		XK_a,		defaultgaps,	{0} },
-	{ MODKEY,			XK_s,		togglesticky,	{0} },
+	{ MODKEY,			XK_s,		spawndefault,	{0} },
+	{ MODKEY|ShiftMask,			XK_s,		togglesticky,	{0} },
 	/* { MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_d,		spawn,          SHCMD("dmenu_run") },
 	//{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
