@@ -272,6 +272,7 @@ static void togglescratch(const Arg *arg);
 static void togglesticky(const Arg *arg);
 static void togglefullscr(const Arg *arg);
 static void toggletag(const Arg *arg);
+static void toggletagdraw();
 static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
@@ -933,33 +934,36 @@ drawbar(Monitor *m)
 			urg |= c->tags;
 	}
 	x = 0;
-	for (i = 0; i < LENGTH(tags); i++) {
-		/* do not draw vacant tags */
-		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
-		continue;
+    if (showtags)
+    {
+        for (i = 0; i < LENGTH(tags); i++) {
+            /* do not draw vacant tags */
+            if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+            continue;
 
-		w = TEXTW(tags[i]);
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-        drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
-		x += w;
-	}
-	w = blw = TEXTW(m->ltsymbol);
-	drw_setscheme(drw, scheme[SchemeNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+            w = TEXTW(tags[i]);
+            drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+            drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+            drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+            x += w;
+        }
+        w = blw = TEXTW(m->ltsymbol);
+        drw_setscheme(drw, scheme[SchemeNorm]);
+        x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+    }
 
-	if ((w = m->ww - tw - x) > bh) {
-		if (m->sel) {
-			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-			if (m->sel->isfloating)
-				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
-		} else {
-			drw_setscheme(drw, scheme[SchemeNorm]);
-			drw_rect(drw, x, 0, w, bh, 1, 1);
-		}
-	}
-	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+    if ((w = m->ww - tw - x) > bh) {
+        if (m->sel) {
+            drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+            drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+            if (m->sel->isfloating)
+                drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
+        } else {
+            drw_setscheme(drw, scheme[SchemeNorm]);
+            drw_rect(drw, x, 0, w, bh, 1, 1);
+        }
+    }
+    drw_map(drw, m->barwin, 0, 0, m->ww, bh);
 }
 
 void
@@ -2196,6 +2200,12 @@ toggletag(const Arg *arg)
 		focus(NULL);
 		arrange(selmon);
 	}
+}
+
+void
+toggletagdraw()
+{
+    showtags = !showtags;
 }
 
 void

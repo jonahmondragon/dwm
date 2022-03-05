@@ -15,6 +15,7 @@ static int swallowfloating    = 0;        /* 1 means swallow floating windows by
 static int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static int showbar            = 1;        /* 0 means no bar */
 static int topbar             = 1;        /* 0 means bottom bar */
+static int showtags           = 0;        /* 0 means don't draw tags; can be toggled with toggletagdraw */
 static char *fonts[]          = { "monospace:size=9", "JoyPixels:pixelsize=10:antialias=true:autohint=true"  };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
@@ -186,7 +187,7 @@ static Key keys[] = {
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
     { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us ; remaps") },
 	//{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
-    { MODKEY,			XK_r,		spawn,		SHCMD("torwrap") },
+    { MODKEY,			XK_r,		toggletagdraw, {0} },
 	{ MODKEY|ShiftMask,			XK_r,	    togglescratch,	{.ui = 3} },
 	{ MODKEY,			XK_t,		setlayout,	{.v = &layouts[0]} }, /* tile */
 	{ MODKEY|ShiftMask,		XK_t,		setlayout,	{.v = &layouts[1]} }, /* bstack */
@@ -256,18 +257,19 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_Page_Down,	shifttag,	{ .i = +1 } },
 	{ MODKEY,			XK_Insert,	spawn,		SHCMD("xdotool type $(grep -v '^#' ~/.local/share/larbs/snippets | dmenu -i -l 50 | cut -d' ' -f1)") },
 
-	//{ MODKEY,			XK_F1,		spawn,		SHCMD("groff -mom /usr/local/share/dwm/larbs.mom -Tpdf | zathura -") },
-	//{ MODKEY,			XK_F2,		spawn,		SHCMD("tutorialvids") },
-	////{ MODKEY,			XK_F3,		spawn,		SHCMD("displayselect") },
-	//{ MODKEY,			XK_F4,	togglescratch,	{.ui = 2} },
-	//[> { MODKEY,			XK_F5,		xrdb,		{.v = NULL } }, <]
-	//{ MODKEY,			XK_F6,		spawn,		SHCMD("torwrap") },
-	////{ MODKEY,			XK_F7,		spawn,		SHCMD("") },
-	//{ MODKEY,			XK_F8,		spawn,		SHCMD("mw -Y") },
-    ////{ MODKEY,			XK_F9,		spawn,		SHCMD("") },
-	////{ MODKEY,			XK_F10,		spawn,		SHCMD("") },
-	//{ MODKEY,			XK_F11,		spawn,		SHCMD("webcam") },
-	//{ MODKEY,			XK_F12,		spawn,		SHCMD("remaps & notify-send \\\"⌨️ Keyboard remapping...\\\" \\\"Re-running keyboard defaults for any newly plugged-in keyboards.\\\"") },
+    //{ MODKEY|ShiftMask,			XK_F1,		toggletagdraw,		{0} },
+    //{ MODKEY|ShiftMask,			XK_F2,		spawn,		SHCMD("") },
+    ////{ MODKEY|ShiftMask,			XK_F3,		spawn,		SHCMD("displayselect") },
+    //{ MODKEY|ShiftMask,			XK_F4,	togglescratch,	{.ui = 2} },
+    //[> { MODKEY|ShiftMask,			XK_F5,		xrdb,		{.v = NULL } }, <]
+    //{ MODKEY|ShiftMask,			XK_F6,		spawn,		SHCMD("torwrap") },
+    ////{ MODKEY|ShiftMask,			XK_F7,		spawn,		SHCMD("") },
+    //{ MODKEY|ShiftMask,			XK_F8,		spawn,		SHCMD("mw -Y") },
+    ////{ MODKEY|ShiftMask,			XK_F9,		spawn,		SHCMD("") },
+    ////{ MODKEY|ShiftMask,			XK_F10,		spawn,		SHCMD("") },
+    //{ MODKEY|ShiftMask,			XK_F11,		spawn,		SHCMD("webcam") },
+    //{ MODKEY|ShiftMask,			XK_F12,		spawn,		SHCMD("remaps & notify-send \\\"⌨️ Keyboard remapping...\\\" \\\"Re-running keyboard defaults for any newly plugged-in keyboards.\\\"") },
+
 	{ MODKEY,			XK_space,	zoom,		{0} },
 	{ MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
 
