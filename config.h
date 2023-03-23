@@ -138,6 +138,7 @@ ResourcePref resources[] = {
 };
 
 #include <X11/XF86keysym.h>
+#include <X11/keysymdef.h>
 #include "shiftview.c"
 
 static Key keys[] = {
@@ -279,15 +280,29 @@ static Key keys[] = {
 	{ MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
 	{ MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
 	{ MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
-	{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("timeout_toggle") },
+	//{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("") },
 	{ MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
+    { 0,    XK_Pause,              spawn,  SHCMD("slock")},
 
 	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
 	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
 	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
-	{ 0,			    XK_End,	spawn,		SHCMD("sudo suspend_mode_toggle")},
+	//{ 0,			    XK_End,	spawn,		SHCMD("")},
 	//{ MODKEY,			XK_Prior,	spawn,		SHCMD("")},
 	//{ MODKEY,			XK_Next,	spawn,		SHCMD("")},
+
+    { 0,    XK_KP_Insert,           spawn,  SHCMD("suspend_mode_toggle")}, // Keypad 0
+    { 0,    XK_KP_End,              spawn,  SHCMD("cinema toggle")}, // Keypad 1
+    { 0,    XK_KP_Down,             spawn,  SHCMD("")}, // Keypad 2
+    { 0,    XK_KP_Next,             spawn,  SHCMD("")}, // Keypad 3
+    { 0,    XK_KP_Left,             spawn,  SHCMD("")}, // Keypad 4
+    { 0,    XK_KP_Begin,            spawn,  SHCMD("")}, // Keypad 5
+    { 0,    XK_KP_Right,            spawn,  SHCMD("")}, // Keypad 6
+    { 0,    XK_KP_Home,             spawn,  SHCMD("")}, // Keypad 7
+    { 0,    XK_KP_Up,               spawn,  SHCMD("")}, // Keypad 8
+    { 0,    XK_KP_End,              spawn,  SHCMD("")}, // Keypad 9
+    { 0,    XK_KP_Add,              spawn,  SHCMD("")},
+    { 0,    XK_KP_Subtract,              spawn,  SHCMD("killall screenkey || screenkey &")},
 
 	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer -i 2; kill -44 $(pidof dwmblocks)") },
