@@ -15,7 +15,7 @@ static int swallowfloating    = 0;        /* 1 means swallow floating windows by
 static int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static int showbar            = 1;        /* 0 means no bar */
 static int topbar             = 1;        /* 0 means bottom bar */
-static int showtags           = 0;        /* 0 means don't draw tags; can be toggled with toggletagdraw */
+static int showtags           = 1;        /* 0 means don't draw tags; can be toggled with toggletagdraw */
 static char *fonts[]          = { "monospace:size=9", "JoyPixels:pixelsize=10:antialias=true:autohint=true"  };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
