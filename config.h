@@ -293,7 +293,7 @@ static Key keys[] = {
 
     { 0,    XK_KP_Insert,           spawn,  SHCMD("suspend_mode_toggle")}, // Keypad 0
     { 0,    XK_KP_End,              spawn,  SHCMD("cinema toggle")}, // Keypad 1
-    { 0,    XK_KP_Down,             spawn,  SHCMD("")}, // Keypad 2
+    { 0,    XK_KP_Down,	        togglescratch,	{.ui = 2} }, // Keypad 2
     { 0,    XK_KP_Next,             spawn,  SHCMD("")}, // Keypad 3
     { 0,    XK_KP_Left,             spawn,  SHCMD("")}, // Keypad 4
     { 0,    XK_KP_Begin,            spawn,  SHCMD("")}, // Keypad 5
