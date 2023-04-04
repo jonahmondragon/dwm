@@ -286,9 +286,6 @@ static Key keys[] = {
 	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
 	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
 	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
-	//{ 0,			    XK_End,	spawn,		SHCMD("")},
-	//{ MODKEY,			XK_Prior,	spawn,		SHCMD("")},
-	//{ MODKEY,			XK_Next,	spawn,		SHCMD("")},
 
     { 0,            XK_KP_Insert,           spawn,  SHCMD("elogind-conf toggle suspend")}, // Keypad 0
     { 0,            XK_KP_Delete,           spawn,  SHCMD("elogind-conf toggle hibernation")},
