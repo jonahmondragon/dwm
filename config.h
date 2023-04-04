@@ -263,7 +263,6 @@ static Key keys[] = {
     //{ MODKEY|ShiftMask,			XK_F2,		spawn,		SHCMD("") },
     ////{ MODKEY|ShiftMask,			XK_F3,		spawn,		SHCMD("displayselect") },
     //{ MODKEY|ShiftMask,			XK_F4,	togglescratch,	{.ui = 2} },
-    //[> { MODKEY|ShiftMask,			XK_F5,		xrdb,		{.v = NULL } }, <]
     //{ MODKEY|ShiftMask,			XK_F6,		spawn,		SHCMD("torwrap") },
     ////{ MODKEY|ShiftMask,			XK_F7,		spawn,		SHCMD("") },
     //{ MODKEY|ShiftMask,			XK_F8,		spawn,		SHCMD("mw -Y") },
@@ -297,7 +296,7 @@ static Key keys[] = {
     { ShiftMask,            XK_KP_End,      spawn,  SHCMD("cinema only")}, // Keypad 1
     { 0,            XK_KP_Down,	    togglescratch,	{.ui = 2}}, // Keypad 2
     { ShiftMask,    XK_KP_Down,	            spawn,	SHCMD("rotate-screen down")}, // Keypad 2
-    { 0,            XK_KP_Next,             spawn,  SHCMD("")}, // Keypad 3
+    { 0,			XK_KP_Next,		        xrdb,   {.v = NULL }}, // Keypad 3
     { 0,            XK_KP_Left,             spawn,  SHCMD("")}, // Keypad 4
     { ShiftMask,    XK_KP_Left,             spawn,  SHCMD("rotate-screen left")}, // Keypad 4
     { 0,            XK_KP_Begin,            spawn,  SHCMD("")}, // Keypad 5
@@ -305,7 +304,7 @@ static Key keys[] = {
     { ShiftMask,    XK_KP_Right,            spawn,  SHCMD("rotate-screen right")}, // Keypad 6
     { 0,            XK_KP_Home,             spawn,  SHCMD("")}, // Keypad 7
     { 0,            XK_KP_Up,               spawn,  SHCMD("")}, // Keypad 8
-    { ShiftMask,    XK_KP_Up,                spawn, SHCMD("rotate-screen up")}, // Keypad 8
+    { ShiftMask,    XK_KP_Up,               spawn, SHCMD("rotate-screen up")}, // Keypad 8
     { 0,            XK_KP_End,              spawn,  SHCMD("")}, // Keypad 9
     { 0,            XK_KP_Add,              spawn,  SHCMD("")},
     { 0,            XK_KP_Subtract,              spawn,  SHCMD("killall screenkey || screenkey &")},
@@ -456,4 +455,5 @@ static Signal signals[] = {
 	{ "quit",           quit },
 	{ "setlayout",      setlayout },
 	{ "setlayoutex",    setlayoutex },
+    { "xrdb",           xrdb },
 };
