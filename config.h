@@ -200,9 +200,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_i,		setlayout,	{.v = &layouts[7]} }, /* centeredfloatingmaster */
 	{ MODKEY,			XK_o,		incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,		XK_o,		incnmaster,     {.i = -1 } },
-	{ MODKEY,			XK_p,			spawn,		SHCMD("mpc toggle") },
+	{ MODKEY,			XK_p,			spawn,		    SHCMD("media_control toggle") },
 	{ MODKEY|ShiftMask,		XK_p,			spawn,		SHCMD("toggleallmpv") },
-	{ MODKEY|ControlMask,		XK_p,			spawn,		SHCMD("mpc pause ; pauseallmpv") },
+    { MODKEY|ControlMask,		XK_p,			spawn,	SHCMD("media_control toggleselect") },
 
 	{ MODKEY,			XK_bracketleft,	focusmon,	{.i = -1 } },
 	{ MODKEY|ShiftMask,		XK_bracketleft,	tagmon,		{.i = -1 } },
@@ -294,15 +294,16 @@ static Key keys[] = {
     { 0,            XK_KP_Down,	    togglescratch,	{.ui = 2}}, // Keypad 2
     { ShiftMask,    XK_KP_Down,	            spawn,	SHCMD("rotate-screen down")}, // Keypad 2
     { 0,			XK_KP_Next,		        xrdb,   {.v = NULL }}, // Keypad 3
-    { 0,            XK_KP_Left,             spawn,  SHCMD("")}, // Keypad 4
+    { 0,            XK_KP_Left,             spawn,  SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
     { ShiftMask,    XK_KP_Left,             spawn,  SHCMD("rotate-screen left")}, // Keypad 4
-    { 0,            XK_KP_Begin,            spawn,  SHCMD("")}, // Keypad 5
+    { 0,            XK_KP_Begin,            spawn,  SHCMD("mounter")}, // Keypad 5
+    { ShiftMask,    XK_KP_Begin,            spawn,  SHCMD("unmounter")}, // Keypad 5
     { 0,            XK_KP_Right,            spawn,  SHCMD("")}, // Keypad 6
     { ShiftMask,    XK_KP_Right,            spawn,  SHCMD("rotate-screen right")}, // Keypad 6
     { 0,            XK_KP_Home,             spawn,  SHCMD("")}, // Keypad 7
     { 0,            XK_KP_Up,               spawn,  SHCMD("")}, // Keypad 8
     { ShiftMask,    XK_KP_Up,               spawn,  SHCMD("rotate-screen up")}, // Keypad 8
-    { 0,            XK_KP_End,              spawn,  SHCMD("")}, // Keypad 9
+    { 0,            XK_KP_Prior,            spawn,  SHCMD("passmenu")}, // Keypad 9
     { 0,            XK_KP_Add,              spawn,  SHCMD("")},
     { 0,            XK_KP_Subtract,         spawn,  SHCMD("killall screenkey || screenkey &")},
 
