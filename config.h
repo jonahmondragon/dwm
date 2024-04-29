@@ -221,7 +221,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,			XK_s,		togglesticky,	{0} },
 	/* { MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_d,		spawn,          SHCMD("dmenu_run") },
-	//{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
+	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
+	{ MODKEY|ControlMask|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu --type") },
 	{ MODKEY,			XK_f,		togglefullscr,	{0} },
 	{ MODKEY|ShiftMask,		XK_f,		setlayout,	{.v = &layouts[8]} },
 	/* J and K are automatically bound above in STACKEYS */
@@ -298,13 +299,13 @@ static Key keys[] = {
     { ShiftMask,    XK_KP_Left,             spawn,  SHCMD("rotate-screen left")}, // Keypad 4
     { 0,            XK_KP_Begin,            spawn,  SHCMD("mounter")}, // Keypad 5
     { ShiftMask,    XK_KP_Begin,            spawn,  SHCMD("unmounter")}, // Keypad 5
-    { 0,            XK_KP_Right,            spawn,  SHCMD("")}, // Keypad 6
+    { 0,            XK_KP_Right,            spawn,  SHCMD("cinema nomirror")}, // Keypad 6
     { ShiftMask,    XK_KP_Right,            spawn,  SHCMD("rotate-screen right")}, // Keypad 6
     { 0,            XK_KP_Home,             spawn,  SHCMD("")}, // Keypad 7
     { 0,            XK_KP_Up,               spawn,  SHCMD("")}, // Keypad 8
     { ShiftMask,    XK_KP_Up,               spawn,  SHCMD("rotate-screen up")}, // Keypad 8
-    { 0,            XK_KP_Prior,            spawn,  SHCMD("passmenu")}, // Keypad 9
-    { 0,            XK_KP_Add,              spawn,  SHCMD("")},
+    { 0,            XK_KP_Prior,            spawn,  SHCMD("")}, // Keypad 9
+    { 0,            XK_KP_Add,              spawn,  SHCMD("setsid k-f '$TERMINAL' -e tremc")},
     { 0,            XK_KP_Subtract,         spawn,  SHCMD("killall screenkey || screenkey &")},
 
 	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
