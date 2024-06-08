@@ -157,18 +157,18 @@ static Key keys[] = {
 	TAGKEYS(			XK_7,		6)
 	TAGKEYS(			XK_8,		7)
 	TAGKEYS(			XK_9,		8)
-	TAGKEYS(			XK_F1,		9)
-	TAGKEYS(			XK_F2,		10)
-	TAGKEYS(			XK_F3,		11)
-	TAGKEYS(			XK_F4,		12)
-	TAGKEYS(			XK_F5,		13)
-	TAGKEYS(			XK_F6,		14)
-	TAGKEYS(			XK_F7,		15)
-	TAGKEYS(			XK_F8,		16)
-	TAGKEYS(			XK_F9,		17)
-	TAGKEYS(			XK_F10,		18)
-	TAGKEYS(			XK_F11,		19)
-	TAGKEYS(			XK_F12,		20)
+	// TAGKEYS(			XK_F1,		9)
+	// TAGKEYS(			XK_F2,		10)
+	// TAGKEYS(			XK_F3,		11)
+	// TAGKEYS(			XK_F4,		12)
+	// TAGKEYS(			XK_F5,		13)
+	// TAGKEYS(			XK_F6,		14)
+	// TAGKEYS(			XK_F7,		15)
+	// TAGKEYS(			XK_F8,		16)
+	// TAGKEYS(			XK_F9,		17)
+	// TAGKEYS(			XK_F10,		18)
+	// TAGKEYS(			XK_F11,		19)
+	// TAGKEYS(			XK_F12,		20)
 	{ MODKEY,			XK_0,		view,		{.ui = ~0 } },
 	{ MODKEY|ShiftMask,		XK_0,		tag,		{.ui = ~0 } },
 	{ MODKEY,			XK_minus,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
@@ -288,26 +288,43 @@ static Key keys[] = {
 	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
 	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
 
-    { 0,            XK_KP_Insert,           spawn,  SHCMD("elogind-conf toggle suspend")}, // Keypad 0
-    { 0,            XK_KP_Delete,           spawn,  SHCMD("elogind-conf toggle hibernation")},
-    { 0,            XK_KP_End,              spawn,  SHCMD("cinema toggle")}, // Keypad 1
-    { ShiftMask,    XK_KP_End,              spawn,  SHCMD("cinema only")}, // Keypad 1
-    { 0,            XK_KP_Down,	    togglescratch,	{.ui = 2}}, // Keypad 2
-    { ShiftMask,    XK_KP_Down,	            spawn,	SHCMD("rotate-screen down")}, // Keypad 2
-    { 0,			XK_KP_Next,		        xrdb,   {.v = NULL }}, // Keypad 3
-    { 0,            XK_KP_Left,             spawn,  SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
-    { ShiftMask,    XK_KP_Left,             spawn,  SHCMD("rotate-screen left")}, // Keypad 4
-    { 0,            XK_KP_Begin,            spawn,  SHCMD("mounter")}, // Keypad 5
-    { ShiftMask,    XK_KP_Begin,            spawn,  SHCMD("unmounter")}, // Keypad 5
-    { 0,            XK_KP_Right,            spawn,  SHCMD("cinema nomirror")}, // Keypad 6
-    { ShiftMask,    XK_KP_Right,            spawn,  SHCMD("rotate-screen right")}, // Keypad 6
-    { 0,            XK_KP_Home,             spawn,  SHCMD("")}, // Keypad 7
-    { 0,            XK_KP_Up,               spawn,  SHCMD("")}, // Keypad 8
-    { ShiftMask,    XK_KP_Up,               spawn,  SHCMD("rotate-screen up")}, // Keypad 8
-    { 0,            XK_KP_Prior,            spawn,  SHCMD("")}, // Keypad 9
-    { 0,            XK_KP_Add,              spawn,  SHCMD("setsid k-f '$TERMINAL' -e tremc")},
-    { 0,            XK_KP_Subtract,         spawn,  SHCMD("killall screenkey || screenkey &")},
+  // Function keys
+  { 0,         XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
+  { 0,         XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
+  { 0,         XK_F2,  spawn,         SHCMD("cinema toggle")},
+  { ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
+  { 0,         XK_F3,  togglescratch, {.ui = 2}},
+  { ShiftMask, XK_F3,  spawn,	        SHCMD("rotate-screen down")},
+  { 0,			   XK_F4,  xrdb,          {.v = NULL }},
+  { 0,         XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
+  { ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
+  { 0,         XK_F6,  spawn,         SHCMD("mounter")},
+  { ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
+  { 0,         XK_F7,  spawn,         SHCMD("cinema nomirror")},
+  { ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
+  { 0,         XK_F8,  spawn,         SHCMD("")},
+  { 0,         XK_F9,  spawn,         SHCMD("")},
+  { ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
+  { 0,         XK_F10, spawn,         SHCMD("")},
+  { 0,         XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+  { 0,         XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
 
+  // Numpad keys
+  { 0, XK_KP_Insert,   spawn, SHCMD("elogind-conf toggle suspend")}, // Keypad 0
+  { 0, XK_KP_Delete,   spawn, SHCMD("elogind-conf toggle hibernation")},
+  { 0, XK_KP_End,      spawn, SHCMD("cinema toggle")}, // Keypad 1
+  { 0, XK_KP_Down,	   spawn, SHCMD("")},
+  { 0, XK_KP_Next,		 spawn, SHCMD("")},
+  { 0, XK_KP_Left,     spawn, SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
+  { 0, XK_KP_Begin,    spawn, SHCMD("mounter")}, // Keypad 5
+  { 0, XK_KP_Right,    spawn, SHCMD("cinema nomirror")}, // Keypad 6
+  { 0, XK_KP_Home,     spawn, SHCMD("")}, // Keypad 7
+  { 0, XK_KP_Up,       spawn, SHCMD("")}, // Keypad 8
+  { 0, XK_KP_Prior,    spawn, SHCMD("")}, // Keypad 9
+  { 0, XK_KP_Add,      spawn, SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+  { 0, XK_KP_Subtract, spawn, SHCMD("killall screenkey || screenkey &")},
+
+  // Special keys
 	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer -i 2; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
