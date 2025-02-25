@@ -46,8 +46,8 @@ static Sp scratchpads[] = {
 };
 
 /* tagging */
-static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21" };
-static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13,", "14", "15", "16", "17", "18", "19", "20", "21" };
+static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
 static const char *defaulttagapps[] = { "st", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
@@ -258,7 +258,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_Page_Up,	shifttag,	{ .i = -1 } },
 	{ MODKEY,			XK_Page_Down,	shiftview,	{ .i = +1 } },
 	{ MODKEY|ShiftMask,		XK_Page_Down,	shifttag,	{ .i = +1 } },
-	{ MODKEY,			XK_Insert,	spawn,		SHCMD("xdotool type $(grep -v '^#' ~/.local/share/larbs/snippets | dmenu -i -l 50 | cut -d' ' -f1)") },
+	{ MODKEY,			XK_Insert,	spawn,		SHCMD("snippets") },
 
     //{ MODKEY|ShiftMask,			XK_F1,		toggletagdraw,		{0} },
     //{ MODKEY|ShiftMask,			XK_F2,		spawn,		SHCMD("") },
@@ -289,25 +289,25 @@ static Key keys[] = {
 	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
 
   // Function keys
-  { 0,         XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
-  { 0,         XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
-  { 0,         XK_F2,  spawn,         SHCMD("cinema toggle")},
-  { ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
-  { 0,         XK_F3,  togglescratch, {.ui = 2}},
-  { ShiftMask, XK_F3,  spawn,	        SHCMD("rotate-screen down")},
-  { 0,			   XK_F4,  xrdb,          {.v = NULL }},
-  { 0,         XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
-  { ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
-  { 0,         XK_F6,  spawn,         SHCMD("mounter")},
-  { ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
-  { 0,         XK_F7,  spawn,         SHCMD("cinema nomirror")},
-  { ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
-  { 0,         XK_F8,  spawn,         SHCMD("")},
-  { 0,         XK_F9,  spawn,         SHCMD("")},
-  { ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
-  { 0,         XK_F10, spawn,         SHCMD("")},
-  { 0,         XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
-  { 0,         XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
+  { ModMask|,          XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
+  { ModMask|,          XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
+  { ModMask|,          XK_F2,  spawn,         SHCMD("cinema toggle")},
+  { ModMask|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
+  { ModMask|,          XK_F3,  togglescratch, {.ui = 2}},
+  { ModMask|ShiftMask, XK_F3,  spawn,	      SHCMD("rotate-screen down")},
+  { ModMask|, 		   XK_F4,  xrdb,          {.v = NULL }},
+  { ModMask|,          XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
+  { ModMask|ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
+  { ModMask|,          XK_F6,  spawn,         SHCMD("mounter")},
+  { ModMask|ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
+  { ModMask|,          XK_F7,  spawn,         SHCMD("cinema nomirror")},
+  { ModMask|ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
+  { ModMask|,          XK_F8,  spawn,         SHCMD("")},
+  { ModMask|,          XK_F9,  spawn,         SHCMD("")},
+  { ModMask|ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
+  { ModMask|,          XK_F10, spawn,         SHCMD("")},
+  { ModMask|,          XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+  { ModMask|,          XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
 
   // Numpad keys
   { 0, XK_KP_Insert,   spawn, SHCMD("elogind-conf toggle suspend")}, // Keypad 0
