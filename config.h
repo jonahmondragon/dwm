@@ -46,8 +46,8 @@ static Sp scratchpads[] = {
 };
 
 /* tagging */
-static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static const char *tags[] =    { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
 static const char *defaulttagapps[] = { "st", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
@@ -289,32 +289,32 @@ static Key keys[] = {
 	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
 
   // Function keys
-  { ModMask|,          XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
-  { ModMask|,          XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
-  { ModMask|,          XK_F2,  spawn,         SHCMD("cinema toggle")},
-  { ModMask|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
-  { ModMask|,          XK_F3,  togglescratch, {.ui = 2}},
-  { ModMask|ShiftMask, XK_F3,  spawn,	      SHCMD("rotate-screen down")},
-  { ModMask|, 		   XK_F4,  xrdb,          {.v = NULL }},
-  { ModMask|,          XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
-  { ModMask|ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
-  { ModMask|,          XK_F6,  spawn,         SHCMD("mounter")},
-  { ModMask|ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
-  { ModMask|,          XK_F7,  spawn,         SHCMD("cinema nomirror")},
-  { ModMask|ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
-  { ModMask|,          XK_F8,  spawn,         SHCMD("")},
-  { ModMask|,          XK_F9,  spawn,         SHCMD("")},
-  { ModMask|ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
-  { ModMask|,          XK_F10, spawn,         SHCMD("")},
-  { ModMask|,          XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
-  { ModMask|,          XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
+  { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
+  { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
+  { MODKEY,           XK_F2,  spawn,         SHCMD("cinema toggle")},
+  { MODKEY|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
+  { MODKEY,           XK_F3,  togglescratch, {.ui = 2}},
+  { MODKEY|ShiftMask, XK_F3,  spawn,	      SHCMD("rotate-screen down")},
+  { MODKEY,  		  XK_F4,  xrdb,          {.v = NULL }},
+  { MODKEY,           XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
+  { MODKEY|ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
+  { MODKEY,           XK_F6,  spawn,         SHCMD("mounter")},
+  { MODKEY|ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
+  { MODKEY,           XK_F7,  spawn,         SHCMD("cinema nomirror")},
+  { MODKEY|ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
+  { MODKEY,           XK_F8,  spawn,         SHCMD("")},
+  { MODKEY,           XK_F9,  spawn,         SHCMD("")},
+  { MODKEY|ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
+  { MODKEY,           XK_F10, spawn,         SHCMD("")},
+  { MODKEY,           XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+  { MODKEY,           XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
 
   // Numpad keys
   { 0, XK_KP_Insert,   spawn, SHCMD("elogind-conf toggle suspend")}, // Keypad 0
-  { 0, XK_KP_Delete,   spawn, SHCMD("elogind-conf toggle hibernation")},
+  { 0, XK_KP_Delete,   spawn, SHCMD("elogind-conf toggle hibernation")}, //Keypad .
   { 0, XK_KP_End,      spawn, SHCMD("cinema toggle")}, // Keypad 1
-  { 0, XK_KP_Down,	   spawn, SHCMD("")},
-  { 0, XK_KP_Next,		 spawn, SHCMD("")},
+  { 0, XK_KP_Down,	   spawn, SHCMD("")}, //Keypad 2
+  // { 0, XK_KP_Next,	   transfermon, {0}}, //Keypad 3
   { 0, XK_KP_Left,     spawn, SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
   { 0, XK_KP_Begin,    spawn, SHCMD("mounter")}, // Keypad 5
   { 0, XK_KP_Right,    spawn, SHCMD("cinema nomirror")}, // Keypad 6
