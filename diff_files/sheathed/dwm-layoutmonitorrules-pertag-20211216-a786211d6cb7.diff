@@ -1,0 +1,110 @@
+diff --git config.def.h config.def.h
+index a2ac963..9af5393 100644
+--- config.def.h
++++ config.def.h
+@@ -37,6 +37,11 @@ static const int nmaster     = 1;    /* number of clients in master area */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+ 
++static const LayoutMonitorRule lm_rules[] = {
++	/* >=w, >=h, req'd layout, new nmaster, new mfact */
++	{ 3000, 0,   0,            2,           0.66 },
++};
++
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+diff --git dwm.c dwm.c
+index 5eeb496..b71cac9 100644
+--- dwm.c
++++ dwm.c
+@@ -111,6 +111,13 @@ typedef struct {
+ 	void (*arrange)(Monitor *);
+ } Layout;
+ 
++typedef struct {
++	int mw, mh;    /* >= matching */
++	int layout;    /* only apply if this is the current layout, <0 for no matching */
++	int nmaster;   /* the new nmaster to apply */
++	float mfact;   /* the new mfact to apply */
++} LayoutMonitorRule;
++
+ typedef struct Pertag Pertag;
+ struct Monitor {
+ 	char ltsymbol[16];
+@@ -144,6 +151,7 @@ typedef struct {
+ } Rule;
+ 
+ /* function declarations */
++static void applylmrules(void);
+ static void applyrules(Client *c);
+ static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
+ static void arrange(Monitor *m);
+@@ -287,6 +295,39 @@ struct Pertag {
+ struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+ 
+ /* function implementations */
++void
++applylmrules(void)
++{
++	size_t t;
++
++	for (t = 0; t <= LENGTH(tags); t++) {
++		float new_mfact = mfact;
++		int new_nmaster = nmaster;
++		size_t i;
++
++		for (i = 0; i < LENGTH(lm_rules); i++) {
++			const LayoutMonitorRule *lmr = &lm_rules[i];
++
++			if (selmon->mw >= lmr->mw &&
++			    selmon->mh >= lmr->mh &&
++			    selmon->lt[selmon->pertag->sellts[t]] == &layouts[lmr->layout])
++			{
++				new_mfact = lmr->mfact;
++				new_nmaster = lmr->nmaster;
++				break;
++			}
++		}
++
++		selmon->pertag->mfacts[t] = new_mfact;
++		selmon->pertag->nmasters[t] = new_nmaster;
++
++	}
++
++	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
++	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
++	arrange(selmon);
++}
++
+ void
+ applyrules(Client *c)
+ {
+@@ -583,6 +624,7 @@ configurenotify(XEvent *e)
+ 			}
+ 			focus(NULL);
+ 			arrange(NULL);
++			applylmrules();
+ 		}
+ 	}
+ }
+@@ -1532,9 +1574,8 @@ setlayout(const Arg *arg)
+ 	if (arg && arg->v)
+ 		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)arg->v;
+ 	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
+-	if (selmon->sel)
+-		arrange(selmon);
+-	else
++	applylmrules();
++	if (!selmon->sel)
+ 		drawbar(selmon);
+ }
+ 
+@@ -1621,6 +1662,7 @@ setup(void)
+ 	XSelectInput(dpy, root, wa.event_mask);
+ 	grabkeys();
+ 	focus(NULL);
++	applylmrules();
+ }
+ 
+ 

@@ -1,0 +1,185 @@
+From a69526cdfa0f3c15ac60e290cbd1282cd02a59c5 Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Sun, 19 Feb 2023 08:58:02 -0800
+Subject: added reset_view function
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.37.4"
+
+This is a multi-part message in MIME format.
+--------------2.37.4
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+---
+ config.def.h |  9 +++++++++
+ dwm.c        | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+
+
+--------------2.37.4
+Content-Type: text/x-patch; name="0003-added-reset_view-function.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0003-added-reset_view-function.patch"
+
+diff --git a/config.def.h b/config.def.h
+index c59d27597a62ddf884baacded2830a318db1b45c..a664c793845c4c7c0ebe8ac69c96885c76193819 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -27,23 +27,31 @@ static const Rule rules[] = {
+ 	 *	WM_NAME(STRING) = title
+ 	 */
+ 	/* class      instance    title       tags mask     isfloating   monitor */
+ 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+ 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+ };
+ 
+ /* layout(s) */
+ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+ static const int nmaster     = 1;    /* number of clients in master area */
++static const int nviews      = 3;    /* mask of tags highlighted by default (tags 1-4) */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+ 
++static const float facts[1];    //static const float facts[]     = {     0,     0.5 }; // = mfact   // 50%
++static const int masters[1];    //static const int masters[]     = {     0,      -1 }; // = nmaster // vertical stacking (for rotated monitor)
++static const int views[1];      //static const int views[]       = {     0,      ~0 }; // = nviews  // all tags
++/* invert tags after nviews */  /* array dimentions can both be as big as needed */  // final highlighted tags
++static const int toggles[1][1]; //static const int toggles[2][2] = { {0,8}, {~0,~0} }; // 2-4+9     // all (leave as views above)
++static const int toggles[1][1] = {{~0}};
++
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+ };
+ 
+ /* key definitions */
+ #define WINKEY Mod4Mask
+ #define MODKEY Mod1Mask
+@@ -90,30 +97,32 @@ static const Key keys[] = {
+ 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+ 	TAGKEYS(                        XK_1,                      0)
+ 	TAGKEYS(                        XK_2,                      1)
+ 	TAGKEYS(                        XK_3,                      2)
+ 	TAGKEYS(                        XK_4,                      3)
+ 	TAGKEYS(                        XK_5,                      4)
+ 	TAGKEYS(                        XK_6,                      5)
+ 	TAGKEYS(                        XK_7,                      6)
+ 	TAGKEYS(                        XK_8,                      7)
+ 	TAGKEYS(                        XK_9,                      8)
++	{ MODKEY,                       XK_grave,  reset_view,     {0} },
+ 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+ };
+ 
+ /* button definitions */
+ /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+ static const Button buttons[] = {
+ 	/* click                event mask      button          function        argument */
+ 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+ 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+ 	{ ClkMonNum,            0,              Button1,        focusmon,       {.i = +1} },
++	{ ClkMonNum,            0,              Button2,        reset_view,     {0} },
+ 	{ ClkMonNum,            0,              Button3,        focusmon,       {.i = -1} },
+ 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+ 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+ 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+ 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+ 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+ 	{ ClkTagBar,            0,              Button1,        view,           {0} },
+ 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
+ 	{ ClkTagBar,            MODKEY|WINKEY,  Button1,        nview,          {0} },
+ 	{ ClkTagBar,            MODKEY|WINKEY,  Button3,        ntoggleview,    {0} },
+diff --git a/dwm.c b/dwm.c
+index 2cf8d78c22c64ff26eda6195b6bd503f213a4d5f..93da0f4565d7a17ef96a1b167cfcb2c9f0ac6ad3 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -229,20 +229,21 @@ static void updatetitle(Client *c);
+ static void updatewindowtype(Client *c);
+ static void updatewmhints(Client *c);
+ static void nview(const Arg *arg);
+ static void view(const Arg *arg);
+ static Client *wintoclient(Window w);
+ static Monitor *wintomon(Window w);
+ static int xerror(Display *dpy, XErrorEvent *ee);
+ static int xerrordummy(Display *dpy, XErrorEvent *ee);
+ static int xerrorstart(Display *dpy, XErrorEvent *ee);
+ static void zoom(const Arg *arg);
++static void reset_view(const Arg *arg);
+ 
+ /* variables */
+ static const char broken[] = "broken";
+ static char stext[256];
+ static int screen;
+ static int sw, sh;           /* X display screen geometry width, height */
+ static int bh;               /* bar height */
+ static int lrpad;            /* sum of left and right padding for text */
+ static int (*xerrorxlib)(Display *, XErrorEvent *);
+ static unsigned int numlockmask = 0;
+@@ -2161,33 +2162,62 @@ zoom(const Arg *arg)
+ {
+ 	Client *c = selmon->sel;
+ 
+ 	if (!selmon->lt[selmon->sellt]->arrange || !c || c->isfloating)
+ 		return;
+ 	if (c == nexttiled(selmon->clients) && !(c = nexttiled(c->next)))
+ 		return;
+ 	pop(c);
+ }
+ 
++void
++reset_view(const Arg *arg) {
++	const int mon = selmon->num;
++	Arg n = {.i = +1};	// focusmon(next monitor)
++	Arg m = {.f = 0};	// mfact -> facts[]
++	Arg i = {.i = 0};	// nmaster -> masters[]
++	Arg v = {.ui = 0};	// nviews -> views[]
++	Arg t = {.ui = 0};	// toggles[] -> toggleview()
++	unsigned int x;
++	do {
++		focusmon(&n);
++		m.f = (facts[selmon->num] ? facts[selmon->num] : mfact) +1;
++		i.i = (masters[selmon->num] ? masters[selmon->num] : nmaster) - selmon->nmaster;
++		v.ui = (views[selmon->num] == ~0 ? ~0 : ((1 << (views[selmon->num] ? (views[selmon->num] +1) : (nviews +1))) -1));
++		setmfact(&m);
++		incnmaster(&i);
++		view(&v);
++		for (x = 0; x < LENGTH(toggles[selmon->num]); x++) {
++			if ((toggles[selmon->num][x] || toggles[selmon->num][x] == 0) && toggles[selmon->num][x] != ~0) {
++				t.ui = (1 << toggles[selmon->num][x]);
++				toggleview(&t);
++			};
++		}
++	}
++	while (selmon->num != mon);
++}
++
+ int
+ main(int argc, char *argv[])
+ {
+ 	if (argc == 2 && !strcmp("-v", argv[1]))
+ 		die("dwm-"VERSION);
+ 	else if (argc != 1)
+ 		die("usage: dwm [-v]");
+ 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
+ 		fputs("warning: no locale support\n", stderr);
+ 	if (!(dpy = XOpenDisplay(NULL)))
+ 		die("dwm: cannot open display");
+ 	checkotherwm();
+ 	setup();
+ #ifdef __OpenBSD__
+ 	if (pledge("stdio rpath proc exec", NULL) == -1)
+ 		die("pledge");
+ #endif /* __OpenBSD__ */
+ 	scan();
++	const Arg r = {0};
++	reset_view(&r);
+ 	run();
+ 	cleanup();
+ 	XCloseDisplay(dpy);
+ 	return EXIT_SUCCESS;
+ }
+
+--------------2.37.4--
+
+

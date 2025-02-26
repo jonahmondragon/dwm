@@ -1,0 +1,183 @@
+From 96ebf3ddfad143aec93a7d2aa212389121ccae41 Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Sun, 19 Feb 2023 08:57:30 -0800
+Subject: added n*view wrappers, for unified multi-monitor
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.37.4"
+
+This is a multi-part message in MIME format.
+--------------2.37.4
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+---
+ config.def.h |  5 +++++
+ dwm.c        | 26 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+
+
+--------------2.37.4
+Content-Type: text/x-patch; name="0002-added-n-view-wrappers-for-unified-multi-monitor.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0002-added-n-view-wrappers-for-unified-multi-monitor.patch"
+
+diff --git a/config.def.h b/config.def.h
+index 9d549ce8628e1a7769ee2a3d5c0a4c6d56ce6931..c59d27597a62ddf884baacded2830a318db1b45c 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -38,24 +38,27 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
+ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+ 
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+ };
+ 
+ /* key definitions */
++#define WINKEY Mod4Mask
+ #define MODKEY Mod1Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
++	{ MODKEY|WINKEY,                KEY,      nview,          {.ui = 1 << TAG} }, \
++	{ MODKEY|WINKEY|ControlMask,    KEY,      ntoggleview,    {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+ 
+ /* helper for spawning shell commands in the pre dwm-5.0 fashion */
+ #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+ static const char *termcmd[]  = { "st", NULL };
+@@ -105,14 +108,16 @@ static const Button buttons[] = {
+ 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+ 	{ ClkMonNum,            0,              Button1,        focusmon,       {.i = +1} },
+ 	{ ClkMonNum,            0,              Button3,        focusmon,       {.i = -1} },
+ 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+ 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+ 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+ 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+ 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+ 	{ ClkTagBar,            0,              Button1,        view,           {0} },
+ 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
++	{ ClkTagBar,            MODKEY|WINKEY,  Button1,        nview,          {0} },
++	{ ClkTagBar,            MODKEY|WINKEY,  Button3,        ntoggleview,    {0} },
+ 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+ 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+ };
+ 
+diff --git a/dwm.c b/dwm.c
+index bc5160a7d46ab07da82f0595abb7700debb2b891..2cf8d78c22c64ff26eda6195b6bd503f213a4d5f 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -206,34 +206,36 @@ static void setmfact(const Arg *arg);
+ static void setup(void);
+ static void seturgent(Client *c, int urg);
+ static void showhide(Client *c);
+ static void spawn(const Arg *arg);
+ static void tag(const Arg *arg);
+ static void tagmon(const Arg *arg);
+ static void tile(Monitor *m);
+ static void togglebar(const Arg *arg);
+ static void togglefloating(const Arg *arg);
+ static void toggletag(const Arg *arg);
++static void ntoggleview(const Arg *arg);
+ static void toggleview(const Arg *arg);
+ static void unfocus(Client *c, int setfocus);
+ static void unmanage(Client *c, int destroyed);
+ static void unmapnotify(XEvent *e);
+ static void updatebarpos(Monitor *m);
+ static void updatebars(void);
+ static void updateclientlist(void);
+ static int updategeom(void);
+ static void updatenumlockmask(void);
+ static void updatesizehints(Client *c);
+ static void updatestatus(void);
+ static void updatetitle(Client *c);
+ static void updatewindowtype(Client *c);
+ static void updatewmhints(Client *c);
++static void nview(const Arg *arg);
+ static void view(const Arg *arg);
+ static Client *wintoclient(Window w);
+ static Monitor *wintomon(Window w);
+ static int xerror(Display *dpy, XErrorEvent *ee);
+ static int xerrordummy(Display *dpy, XErrorEvent *ee);
+ static int xerrorstart(Display *dpy, XErrorEvent *ee);
+ static void zoom(const Arg *arg);
+ 
+ /* variables */
+ static const char broken[] = "broken";
+@@ -1743,20 +1745,32 @@ toggletag(const Arg *arg)
+ 	if (!selmon->sel)
+ 		return;
+ 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
+ 	if (newtags) {
+ 		selmon->sel->tags = newtags;
+ 		focus(NULL);
+ 		arrange(selmon);
+ 	}
+ }
+ 
++void
++ntoggleview(const Arg *arg)
++{
++	const Arg n = {.i = +1};
++	const int mon = selmon->num;
++	do {
++		focusmon(&n);
++		toggleview(arg);
++	}
++	while (selmon->num != mon);
++}
++
+ void
+ toggleview(const Arg *arg)
+ {
+ 	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
+ 
+ 	if (newtagset) {
+ 		selmon->tagset[selmon->seltags] = newtagset;
+ 		focus(NULL);
+ 		arrange(selmon);
+ 	}
+@@ -2045,20 +2059,32 @@ updatewmhints(Client *c)
+ 		} else
+ 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
+ 		if (wmh->flags & InputHint)
+ 			c->neverfocus = !wmh->input;
+ 		else
+ 			c->neverfocus = 0;
+ 		XFree(wmh);
+ 	}
+ }
+ 
++void
++nview(const Arg *arg)
++{
++	const Arg n = {.i = +1};
++	const int mon = selmon->num;
++	do {
++		focusmon(&n);
++		view(arg);
++	}
++	while (selmon->num != mon);
++}
++
+ void
+ view(const Arg *arg)
+ {
+ 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
+ 		return;
+ 	selmon->seltags ^= 1; /* toggle sel tagset */
+ 	if (arg->ui & TAGMASK)
+ 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+ 	focus(NULL);
+ 	arrange(selmon);
+
+--------------2.37.4--
+
+
