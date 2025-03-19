@@ -3,6 +3,7 @@
 /* Constants */
 #define TERMINAL "st"
 #define TERMCLASS "St"
+#define PROCESS_MANAGER "PROCESS_MANAGER" // Should be set in user profile
 
 /* appearance */
 static unsigned int borderpx  = 3;        /* border pixel of windows */
@@ -42,7 +43,7 @@ static Sp scratchpads[] = {
 	{"spterm",      spcmd1},
 	{"spcalc",      spcmd2},
 	{"pulsemixer",  spcmd3},
-	{"bpytop",      spcmd4},
+	{PROCESS_MANAGER,      spcmd4},
 };
 
 /* tagging */
@@ -318,9 +319,9 @@ static Key keys[] = {
   { 0, XK_KP_Left,     spawn, SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
   { 0, XK_KP_Begin,    spawn, SHCMD("mounter")}, // Keypad 5
   { 0, XK_KP_Right,    spawn, SHCMD("cinema nomirror")}, // Keypad 6
-  { 0, XK_KP_Home,     spawn, SHCMD("")}, // Keypad 7
-  { 0, XK_KP_Up,       spawn, SHCMD("")}, // Keypad 8
-  { 0, XK_KP_Prior,    spawn, SHCMD("")}, // Keypad 9
+  // { 0, XK_KP_Home,     spawn, SHCMD("")}, // Keypad 7
+  // { 0, XK_KP_Up,       spawn, SHCMD("")}, // Keypad 8
+  // { 0, XK_KP_Prior,    spawn, SHCMD("")}, // Keypad 9
   { 0, XK_KP_Add,      spawn, SHCMD("setsid k-f '$TERMINAL' -e tremc")},
   { 0, XK_KP_Subtract, spawn, SHCMD("killall screenkey || screenkey &")},
 

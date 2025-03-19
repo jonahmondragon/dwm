@@ -493,17 +493,17 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 	return *x != c->x || *y != c->y || *w != c->w || *h != c->h;
 }
 
-void
-transfermon()
-{
-    Monitor *prev; 
-
-	if (!mons->next)
-		return;
-
-    prev = selmon;
-    selmon = selmon->next;
-}
+// void
+// transfermon()
+// {
+//     Monitor *prev; 
+//
+// 	if (!mons->next)
+// 		return;
+//
+//     prev = selmon;
+//     selmon = selmon->next;
+// }
 
 void
 arrange(Monitor *m)
