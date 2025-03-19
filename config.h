@@ -3,7 +3,8 @@
 /* Constants */
 #define TERMINAL "st"
 #define TERMCLASS "St"
-#define PROCESS_MANAGER "PROCESS_MANAGER" // Should be set in user profile
+#define PROCESS_MANAGER "PROCESS_MANAGER" // The name of the process manager (btop/htop) scratchpad and to disable swallow.
+#define PROCESS_MANAGER_PATH "/usr/local/bin/btop"
 
 /* appearance */
 static unsigned int borderpx  = 3;        /* border pixel of windows */
@@ -37,13 +38,13 @@ typedef struct {
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "monospace:size=16", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = {TERMINAL, "-n", "pulsemixer", "-f", "monospace:size=9", "-g", "100x30", "-e", "pulsemixer", NULL };
-const char *spcmd4[] = {"sudo", TERMINAL, "-n", "BpyTOP", "-f", "monospace:size=9", "-g", "120x34", "-e", "bpytop", NULL };
+const char *spcmd4[] = {"sudo", TERMINAL, "-n", PROCESS_MANAGER, "-f", "monospace:size=9", "-g", "120x34", "-e", PROCESS_MANAGER_PATH, NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
-	{"spterm",      spcmd1},
-	{"spcalc",      spcmd2},
-	{"pulsemixer",  spcmd3},
-	{PROCESS_MANAGER,      spcmd4},
+	{"spterm",        spcmd1},
+	{"spcalc",        spcmd2},
+	{"pulsemixer",    spcmd3},
+	{PROCESS_MANAGER, spcmd4},
 };
 
 /* tagging */
@@ -65,7 +66,7 @@ static const Rule rules[] = {
 	{ NULL,      "spterm",    NULL,       	    SPTAG(0),     1,           1,         0,        -1 },
 	{ NULL,      "spcalc",    NULL,       	    SPTAG(1),     1,           1,         0,        -1 },
 	{ TERMCLASS,  NULL,       "pulsemixer",     SPTAG(2),     1,           1,         0,        -1 },
-	{ TERMCLASS, "BpyTOP",       NULL,         SPTAG(3),     1,           1,         0,        -1 }, };
+	{ TERMCLASS, PROCESS_MANAGER,       NULL,         SPTAG(3),     1,           1,         0,        -1 }, };
 
 /* layout(s) */
 static float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
