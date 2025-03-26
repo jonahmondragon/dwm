@@ -509,14 +509,16 @@ void
 arrange(Monitor *m)
 {
 	if (m)
+    {
 		showhide(m->stack);
-	else for (m = mons; m; m = m->next)
-		showhide(m->stack);
-	if (m) {
 		arrangemon(m);
 		restack(m);
-	} else for (m = mons; m; m = m->next)
+    }
+	else for (m = mons; m; m = m->next)
+    {
+		showhide(m->stack);
 		arrangemon(m);
+    }
 }
 
 void
