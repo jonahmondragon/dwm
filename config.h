@@ -31,6 +31,13 @@ static char *colors[][3] = {
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 
+#ifndef NDEBUG
+    extern FILE *log_file = NULL;
+    #define DEBUG_MESSAGE(arg) do { if (log_file != NULL) fprintf(log_file, "%s", (arg)); } while (0)
+#else
+    #define DEBUG_MESSAGE(arg) ((void)0)
+#endif
+
 typedef struct {
 	const char *name;
 	const void *cmd;

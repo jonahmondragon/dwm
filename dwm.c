@@ -91,14 +91,6 @@
 
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
 
-#ifndef NDEBUG
-    FILE *log_file;
-    #define DEBUG_MESSAGE(arg) fprintf(log_file, "%s", arg)
-#else
-    #define DEBUG_MESSAGE(arg) ((void)0)
-#endif
-
-
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
@@ -2930,7 +2922,9 @@ handle_opts(const int argc, const char *argv[])
     if (strcmp("-l", argv[1]) == 0 || strcmp("--log", argv[1]) == 0)
     {
         static const size_t max_filepath_size = 420;
+        static const size_t max_date_length = 25;
         char *filepath = NULL;
+        const char *date_str = "%Y_%m_%d_%a_%H:%M:%S_%Z";
         int free_filepath = 0;
 
         if (argc == 2)
@@ -2943,7 +2937,6 @@ handle_opts(const int argc, const char *argv[])
             struct tm *tm = localtime(&t);
             strftime(filepath, max_filepath_size,
                      "/tmp/dwm_log-%Y_%m_%d_%a_%H:%M:%S_%Z.txt", tm);
-            printf("Using default log file path \"%s\".\n", filepath);
             free_filepath = 1;
         }
         else if (argc == 3 && strlen(argv[2]) != 0)
@@ -2965,6 +2958,8 @@ handle_opts(const int argc, const char *argv[])
                 "read/write access to the file's directory and/or the "
                 "file.");
 
+        DEBUG_MESSAGE(date_str);
+
         if (free_filepath)
             free(filepath);
         filepath = NULL;
@@ -2983,7 +2978,6 @@ int
 main(int argc, char *argv[])
 {
     handle_opts(argc, (const char**)argv);
-    DEBUG_MESSAGE("TEST");
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
