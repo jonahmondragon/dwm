@@ -111,6 +111,7 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+
 /* commands */
 static const char *termcmd[]  = { TERMINAL, NULL };
 
@@ -150,27 +151,16 @@ static Key keys[] = {
     { MODKEY,		XK_Escape,	spawn,	SHCMD("pidof xcompmgr ; [ 0 = 0 ] && killall xcompmgr || xcompmgr &") },
 	{ MODKEY,			XK_grave,	spawn,	SHCMD("dmenuunicode") },
 	/* { MODKEY|ShiftMask,		XK_grave,	togglescratch,	SHCMD("") }, */
-	TAGKEYS(			XK_1,		0)
-	TAGKEYS(			XK_2,		1)
-	TAGKEYS(			XK_3,		2)
-	TAGKEYS(			XK_4,		3)
-	TAGKEYS(			XK_5,		4)
-	TAGKEYS(			XK_6,		5)
-	TAGKEYS(			XK_7,		6)
-	TAGKEYS(			XK_8,		7)
-	TAGKEYS(			XK_9,		8)
-	// TAGKEYS(			XK_F1,		9)
-	// TAGKEYS(			XK_F2,		10)
-	// TAGKEYS(			XK_F3,		11)
-	// TAGKEYS(			XK_F4,		12)
-	// TAGKEYS(			XK_F5,		13)
-	// TAGKEYS(			XK_F6,		14)
-	// TAGKEYS(			XK_F7,		15)
-	// TAGKEYS(			XK_F8,		16)
-	// TAGKEYS(			XK_F9,		17)
-	// TAGKEYS(			XK_F10,		18)
-	// TAGKEYS(			XK_F11,		19)
-	// TAGKEYS(			XK_F12,		20)
+    
+    TAGKEYS(XK_1,0)
+	TAGKEYS(XK_2,1)
+	TAGKEYS(XK_3,2)
+	TAGKEYS(XK_4,3)
+	TAGKEYS(XK_5,4)
+	TAGKEYS(XK_6,5)
+	TAGKEYS(XK_7,6)
+	TAGKEYS(XK_8,7)
+	TAGKEYS(XK_9,8)
 	{ MODKEY,			XK_0,		view,		{.ui = ~0 } },
 	{ MODKEY|ShiftMask,		XK_0,		tag,		{.ui = ~0 } },
 	{ MODKEY,			XK_minus,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
@@ -186,7 +176,7 @@ static Key keys[] = {
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY|ShiftMask,		XK_q,		spawn,		SHCMD("sysact") },
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("networkmanager_dmenu") },
+	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("urls") },
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
     { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us ; remaps") },
 	//{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
@@ -274,88 +264,86 @@ static Key keys[] = {
     //{ MODKEY|ShiftMask,			XK_F11,		spawn,		SHCMD("webcam") },
     //{ MODKEY|ShiftMask,			XK_F12,		spawn,		SHCMD("remaps & notify-send \\\"⌨️ Keyboard remapping...\\\" \\\"Re-running keyboard defaults for any newly plugged-in keyboards.\\\"") },
 
-	{ MODKEY,			XK_space,	zoom,		{0} },
-	{ MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
-
-	{ 0,				XK_Print,	spawn,		SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-	{ ShiftMask,			XK_Print,	spawn,		SHCMD("maimpick") },
-	{ MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
-	{ MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
-	{ MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
-	//{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("") },
-	{ MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
+    { MODKEY,			XK_space,	zoom,		{0} },
+    { MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
+    { 0,				XK_Print,	spawn,		SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+    { ShiftMask,			XK_Print,	spawn,		SHCMD("maimpick") },
+    { MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
+    { MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
+    { MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
+    //{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("") },
+    { MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
     { 0,    XK_Pause,              spawn,  SHCMD("slock")},
 
-	{ MODKEY,			XK_Home,	spawn,		SHCMD("brightness up")},
-	{ MODKEY,			XK_End,	spawn,		SHCMD("brightness down")},
-	{ 0,			XK_Home,	spawn,		SHCMD("rotate-screen")},
+    // Function keys
+    { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
+    { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
+    { MODKEY,           XK_F2,  spawn,         SHCMD("cinema toggle")},
+    { MODKEY|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
+    { MODKEY,           XK_F3,  togglescratch, {.ui = 2}},
+    { MODKEY,           XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
+    { MODKEY|ShiftMask, XK_F5,  spawn,         SHCMD("cinema nomirror")},
+    { MODKEY,           XK_F6,  spawn,         SHCMD("")},
+    { MODKEY|ShiftMask, XK_F6,  spawn,         SHCMD("rotate-screen left")},
+    { MODKEY,           XK_F7,  spawn,         SHCMD("")},
+    { MODKEY|ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen up")},
+    { MODKEY,           XK_F8,  spawn,         SHCMD("")},
+    { MODKEY|ShiftMask, XK_F8,  spawn,         SHCMD("rotate-screen down")},
+    { MODKEY,           XK_F9,  spawn,         SHCMD("")},
+    { MODKEY|ShiftMask, XK_F9,  spawn,	       SHCMD("rotate-screen right")},
+    { MODKEY,           XK_F10, spawn,         SHCMD("")},
+    { MODKEY|ShiftMask, XK_F10, spawn,         SHCMD("rotate-screen up")},
+    { MODKEY,           XK_F10, spawn,         SHCMD("mounter")},
+    { MODKEY|ShiftMask, XK_F10, spawn,         SHCMD("unmounter")},
+    { MODKEY,           XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+    { MODKEY,  		    XK_F12, xrdb,          {.v = NULL }},
+    { MODKEY|ShiftMask, XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
 
-  // Function keys
-  { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
-  { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
-  { MODKEY,           XK_F2,  spawn,         SHCMD("cinema toggle")},
-  { MODKEY|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
-  { MODKEY,           XK_F3,  togglescratch, {.ui = 2}},
-  { MODKEY|ShiftMask, XK_F3,  spawn,	      SHCMD("rotate-screen down")},
-  { MODKEY,  		  XK_F4,  xrdb,          {.v = NULL }},
-  { MODKEY,           XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
-  { MODKEY|ShiftMask, XK_F5,  spawn,         SHCMD("rotate-screen left")},
-  { MODKEY,           XK_F6,  spawn,         SHCMD("mounter")},
-  { MODKEY|ShiftMask, XK_F6,  spawn,         SHCMD("unmounter")},
-  { MODKEY,           XK_F7,  spawn,         SHCMD("cinema nomirror")},
-  { MODKEY|ShiftMask, XK_F7,  spawn,         SHCMD("rotate-screen right")},
-  { MODKEY,           XK_F8,  spawn,         SHCMD("")},
-  { MODKEY,           XK_F9,  spawn,         SHCMD("")},
-  { MODKEY|ShiftMask, XK_F9,  spawn,         SHCMD("rotate-screen up")},
-  { MODKEY,           XK_F10, spawn,         SHCMD("")},
-  { MODKEY,           XK_F11, spawn,         SHCMD("setsid k-f '$TERMINAL' -e tremc")},
-  { MODKEY,           XK_F12, spawn,         SHCMD("killall screenkey || screenkey &")},
+    // Numpad keys
+    { 0, XK_KP_Insert,   spawn, SHCMD("elogind-conf toggle suspend")}, // Keypad 0
+    { 0, XK_KP_Delete,   spawn, SHCMD("elogind-conf toggle hibernation")}, //Keypad .
+    { 0, XK_KP_End,      spawn, SHCMD("cinema toggle")}, // Keypad 1
+    { 0, XK_KP_Down,	   spawn, SHCMD("")}, //Keypad 2
+    // { 0, XK_KP_Next,	   transfermon, {0}}, //Keypad 3
+    { 0, XK_KP_Left,     spawn, SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
+    { 0, XK_KP_Begin,    spawn, SHCMD("mounter")}, // Keypad 5
+    { 0, XK_KP_Right,    spawn, SHCMD("cinema nomirror")}, // Keypad 6
+    // { 0, XK_KP_Home,     spawn, SHCMD("")}, // Keypad 7
+    // { 0, XK_KP_Up,       spawn, SHCMD("")}, // Keypad 8
+    // { 0, XK_KP_Prior,    spawn, SHCMD("")}, // Keypad 9
+    { 0, XK_KP_Add,      spawn, SHCMD("setsid k-f '$TERMINAL' -e tremc")},
+    { 0, XK_KP_Subtract, spawn, SHCMD("killall screenkey || screenkey &")},
 
-  // Numpad keys
-  { 0, XK_KP_Insert,   spawn, SHCMD("elogind-conf toggle suspend")}, // Keypad 0
-  { 0, XK_KP_Delete,   spawn, SHCMD("elogind-conf toggle hibernation")}, //Keypad .
-  { 0, XK_KP_End,      spawn, SHCMD("cinema toggle")}, // Keypad 1
-  { 0, XK_KP_Down,	   spawn, SHCMD("")}, //Keypad 2
-  // { 0, XK_KP_Next,	   transfermon, {0}}, //Keypad 3
-  { 0, XK_KP_Left,     spawn, SHCMD("cinema -m 3840x2160 toggle ")}, // Keypad 4
-  { 0, XK_KP_Begin,    spawn, SHCMD("mounter")}, // Keypad 5
-  { 0, XK_KP_Right,    spawn, SHCMD("cinema nomirror")}, // Keypad 6
-  // { 0, XK_KP_Home,     spawn, SHCMD("")}, // Keypad 7
-  // { 0, XK_KP_Up,       spawn, SHCMD("")}, // Keypad 8
-  // { 0, XK_KP_Prior,    spawn, SHCMD("")}, // Keypad 9
-  { 0, XK_KP_Add,      spawn, SHCMD("setsid k-f '$TERMINAL' -e tremc")},
-  { 0, XK_KP_Subtract, spawn, SHCMD("killall screenkey || screenkey &")},
-
-  // Special keys
-	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer -i 2; kill -44 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") },
-	{ 0, XF86XK_AudioNext,		spawn,		SHCMD("mpc next") },
-	{ 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc toggle") },
-	{ 0, XF86XK_AudioPlay,		spawn,		SHCMD("mpc toggle") },
-	{ 0, XF86XK_AudioStop,		spawn,		SHCMD("mpc stop") },
-	{ 0, XF86XK_AudioRewind,	spawn,		SHCMD("mpc seek -10") },
-	{ 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seek +10") },
-	{ 0, XF86XK_AudioMedia,		spawn,		SHCMD("notify") },
-	{ 0, XF86XK_AudioMicMute,	spawn,		SHCMD("pactl set-source-mute @DEFAULT_SOURCE@ toggle") },
-	{ 0, XF86XK_PowerOff,		spawn,		SHCMD("sysact") },
-	{ 0, XF86XK_Calculator,		spawn,		SHCMD(TERMINAL " -e bc -l") },
-	{ 0, XF86XK_Sleep,		spawn,		SHCMD("sudo -A zzz") },
-	{ 0, XF86XK_WWW,		spawn,		SHCMD("$BROWSER") },
-	{ 0, XF86XK_DOS,		spawn,		SHCMD(TERMINAL) },
-	{ 0, XF86XK_ScreenSaver,	spawn,		SHCMD("xlock & xset dpms force off; mpc pause; pauseallmpv") },
-	{ 0, XF86XK_TaskPane,		spawn,		SHCMD(TERMINAL " -e htop") },
-	{ 0, XF86XK_Mail,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks") },
-	{ 0, XF86XK_MyComputer,		spawn,		SHCMD(TERMINAL " -e lf /") },
-	/* { 0, XF86XK_Battery,		spawn,		SHCMD("") }, */
-	{ 0, XF86XK_Launch1,		spawn,		SHCMD("xset dpms force off") },
-	{ 0, XF86XK_TouchpadToggle,	spawn,		SHCMD("(synclient | grep 'TouchpadOff.*1' && synclient TouchpadOff=0) || synclient TouchpadOff=1") },
-	{ 0, XF86XK_TouchpadOff,	spawn,		SHCMD("synclient TouchpadOff=1") },
-	{ 0, XF86XK_TouchpadOn,		spawn,		SHCMD("synclient TouchpadOff=0") },
-	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("brightness up") },
-	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("brightness down") },
-	{ 0, XF86XK_RotateWindows,	spawn,		SHCMD("sleep 2s ; rotate-screen") },
+    // Special keys
+    { 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
+    { 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer -i 2; kill -44 $(pidof dwmblocks)") },
+    { 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer -d 2; kill -44 $(pidof dwmblocks)") },
+    { 0, XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") },
+    { 0, XF86XK_AudioNext,		spawn,		SHCMD("mpc next") },
+    { 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc toggle") },
+    { 0, XF86XK_AudioPlay,		spawn,		SHCMD("mpc toggle") },
+    { 0, XF86XK_AudioStop,		spawn,		SHCMD("mpc stop") },
+    { 0, XF86XK_AudioRewind,	spawn,		SHCMD("mpc seek -10") },
+    { 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seek +10") },
+    { 0, XF86XK_AudioMedia,		spawn,		SHCMD("notify") },
+    { 0, XF86XK_AudioMicMute,	spawn,		SHCMD("pactl set-source-mute @DEFAULT_SOURCE@ toggle") },
+    { 0, XF86XK_PowerOff,		spawn,		SHCMD("sysact") },
+    { 0, XF86XK_Calculator,		spawn,		SHCMD(TERMINAL " -e bc -l") },
+    { 0, XF86XK_Sleep,		spawn,		SHCMD("sudo -A zzz") },
+    { 0, XF86XK_WWW,		spawn,		SHCMD("$BROWSER") },
+    { 0, XF86XK_DOS,		spawn,		SHCMD(TERMINAL) },
+    { 0, XF86XK_ScreenSaver,	spawn,		SHCMD("xlock & xset dpms force off; mpc pause; pauseallmpv") },
+    { 0, XF86XK_TaskPane,		spawn,		SHCMD(TERMINAL " -e htop") },
+    { 0, XF86XK_Mail,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks") },
+    { 0, XF86XK_MyComputer,		spawn,		SHCMD(TERMINAL " -e lf /") },
+    /* { 0, XF86XK_Battery,		spawn,		SHCMD("") }, */
+    { 0, XF86XK_Launch1,		spawn,		SHCMD("xset dpms force off") },
+    { 0, XF86XK_TouchpadToggle,	spawn,		SHCMD("(synclient | grep 'TouchpadOff.*1' && synclient TouchpadOff=0) || synclient TouchpadOff=1") },
+    { 0, XF86XK_TouchpadOff,	spawn,		SHCMD("synclient TouchpadOff=1") },
+    { 0, XF86XK_TouchpadOn,		spawn,		SHCMD("synclient TouchpadOff=0") },
+    { 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("brightness up") },
+    { 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("brightness down") },
+    { 0, XF86XK_RotateWindows,	spawn,		SHCMD("sleep 2s ; rotate-screen") },
 
 
 	/* { MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } }, */
@@ -474,4 +462,5 @@ static Signal signals[] = {
 	{ "setlayout",      setlayout },
 	{ "setlayoutex",    setlayoutex },
     { "xrdb",           xrdb },
+    { "pushstack",      pushstack},
 };

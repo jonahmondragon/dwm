@@ -3,6 +3,13 @@
 
 include config.mk
 
+ifneq (,$(findstring r,$(MAKEFLAGS)))
+	CFLAGS := -DNDEBUG ${CFLAGS}
+else
+	CFLAGS := -g3 ${CFLAGS}
+endif
+
+
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 

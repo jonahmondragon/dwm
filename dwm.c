@@ -20,6 +20,7 @@
  *
  * To understand everything else, start reading main().
  */
+#include <X11/X.h>
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
@@ -41,9 +42,13 @@
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
+#ifdef XRANDR
+#include <X11/extensions/Xrandr.h>
+#endif
 #include <X11/Xft/Xft.h>
 #include <X11/Xlib-xcb.h>
 #include <xcb/res.h>
+#include <time.h>
 
 #include "drw.h"
 #include "util.h"
@@ -85,6 +90,14 @@
                                 }
 
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
+
+#ifndef NDEBUG
+    FILE *log_file;
+    #define DEBUG_MESSAGE(arg) fprintf(log_file, "%s", arg)
+#else
+    #define DEBUG_MESSAGE(arg) ((void)0)
+#endif
+
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -1095,6 +1108,9 @@ focusstack(const Arg *arg)
 	int i = stackpos(arg);
 	Client *c, *p;
 
+    time_t t = time(NULL);
+    DEBUG_MESSAGE("focusstack test!");
+
 	if (i < 0 || !selmon->sel || selmon->sel->isfullscreen)
 		return;
 
@@ -1574,6 +1590,7 @@ void
 pushstack(const Arg *arg) {
 	int i = stackpos(arg);
 	Client *sel = selmon->sel, *c, *p;
+
 
 	if(i < 0 || !sel)
 		return;
@@ -2902,19 +2919,79 @@ load_xresources(void)
 	XCloseDisplay(display);
 }
 
+void
+handle_opts(const int argc, const char *argv[])
+{
+    if (argc <= 1)
+        return;
+    if (strcmp("-v", argv[1]) == 0)
+        die("dwm-"VERSION);
+#ifndef NDEBUG
+    if (strcmp("-l", argv[1]) == 0 || strcmp("--log", argv[1]) == 0)
+    {
+        static const size_t max_filepath_size = 420;
+        char *filepath = NULL;
+        int free_filepath = 0;
+
+        if (argc == 2)
+        {
+            filepath = (char*)malloc(max_filepath_size * sizeof(char));
+            if (filepath == NULL)
+                die("Failed to allocate string... How tf?") ;
+
+            time_t t = time(NULL);
+            struct tm *tm = localtime(&t);
+            strftime(filepath, max_filepath_size,
+                     "/tmp/dwm_log-%Y_%m_%d_%a_%H:%M:%S_%Z.txt", tm);
+            printf("Using default log file path \"%s\".\n", filepath);
+            free_filepath = 1;
+        }
+        else if (argc == 3 && strlen(argv[2]) != 0)
+        {
+            filepath = argv[2];
+            if (strnlen(filepath, max_filepath_size) == max_filepath_size)
+            {
+                die("\"%s\" is too long for file buffer! (what kind of log file "
+                    "path has 420 characters?)");
+            }
+        }
+
+        if (argc > 3)
+            die("usage: dwm [-v][-l|--log [log_file]]\n");
+
+        log_file = fopen(filepath, "w");
+        if (log_file == NULL)
+            die("Error occurred with log file, make sure the user has "
+                "read/write access to the file's directory and/or the "
+                "file.");
+
+        if (free_filepath)
+            free(filepath);
+        filepath = NULL;
+        return;
+    }
+#endif
+
+#ifdef NDEBUG
+    die("usage: dwm [-v]");
+#else
+    die("usage: dwm [-v][-l|--log [log_file]]");
+#endif
+}
+
 int
 main(int argc, char *argv[])
 {
-	if (argc == 2 && !strcmp("-v", argv[1]))
-		die("dwm-"VERSION);
-	else if (argc != 1)
-		die("usage: dwm [-v]");
+    handle_opts(argc, (const char**)argv);
+    DEBUG_MESSAGE("TEST");
+
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	if (!(xcon = XGetXCBConnection(dpy)))
 		die("dwm: cannot get xcb connection\n");
+
 	checkotherwm();
     XrmInitialize();
     loadxrdb();
@@ -2930,6 +3007,10 @@ main(int argc, char *argv[])
 	run();
 	if(restart) execvp(argv[0], argv);
 	cleanup();
+#ifndef NDEBUG
+    if (log_file != NULL)
+        fclose(log_file);
+#endif
 	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;
 }
