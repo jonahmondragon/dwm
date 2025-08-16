@@ -140,6 +140,7 @@ typedef struct {
 	KeySym keysym;
 	void (*func)(const Arg *);
 	const Arg arg;
+    KeySym modifiersym;
 } Key;
 
 typedef struct {
@@ -327,7 +328,7 @@ static Client *swallowingclient(Window w);
 static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
 
-// static void transfermon();
+/*static void transfermon();*/
 
 /* variables */
 static const char broken[] = "broken";
@@ -498,17 +499,17 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 	return *x != c->x || *y != c->y || *w != c->w || *h != c->h;
 }
 
-// void
-// transfermon()
-// {
-//     Monitor *prev; 
-//
-// 	if (!mons->next)
-// 		return;
-//
-//     prev = selmon;
-//     selmon = selmon->next;
-// }
+/*void*/
+/*transfermon()*/
+/*{*/
+/*    Monitor *prev; */
+/**/
+/*	if (!mons->next)*/
+/*		return;*/
+/**/
+/*    prev = selmon;*/
+/*    selmon = selmon->next;*/
+/*}*/
 
 void
 arrange(Monitor *m)
@@ -954,7 +955,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, wdelta, tw = 0;
+	int x, w, wdelta = 0, tw = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -1100,7 +1101,6 @@ focusstack(const Arg *arg)
 	int i = stackpos(arg);
 	Client *c, *p;
 
-    time_t t = time(NULL);
     DEBUG_MESSAGE("focusstack test!");
 
 	if (i < 0 || !selmon->sel || selmon->sel->isfullscreen)
@@ -1240,7 +1240,6 @@ incnmaster(const Arg *arg)
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag] = MAX(selmon->nmaster + arg->i, 0);
 	arrange(selmon);
 }
-
 #ifdef XINERAMA
 static int
 isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
@@ -1287,6 +1286,8 @@ fake_signal(void)
 		// Check if this is indeed a fake signal
 		if (len_indicator > len_fsignal ? 0 : strncmp(indicator, fsignal, len_indicator) == 0) {
 			paramn = sscanf(fsignal+len_indicator, "%s%n%s%n", str_sig, &len_str_sig, param, &n);
+
+            DEBUG_MESSAGE("About to integrate signal");
 
 			if (paramn == 1) arg = (Arg) {0};
 			else if (paramn > 2) return 1;
@@ -2280,6 +2281,7 @@ void
 toggletagdraw()
 {
     showtags = !showtags;
+    drawbars();
 }
 
 void
@@ -2912,72 +2914,79 @@ load_xresources(void)
 }
 
 void
-handle_opts(const int argc, const char *argv[])
+handle_opts(int argc, char *argv[])
 {
     if (argc <= 1)
         return;
     if (strcmp("-v", argv[1]) == 0)
-        die("dwm-"VERSION);
-#ifndef NDEBUG
-    if (strcmp("-l", argv[1]) == 0 || strcmp("--log", argv[1]) == 0)
     {
-        static const size_t max_filepath_size = 420;
-        static const size_t max_date_length = 25;
-        char *filepath = NULL;
-        const char *date_str = "%Y_%m_%d_%a_%H:%M:%S_%Z";
-        int free_filepath = 0;
-
-        if (argc == 2)
-        {
-            filepath = (char*)malloc(max_filepath_size * sizeof(char));
-            if (filepath == NULL)
-                die("Failed to allocate string... How tf?") ;
-
-            time_t t = time(NULL);
-            struct tm *tm = localtime(&t);
-            strftime(filepath, max_filepath_size,
-                     "/tmp/dwm_log-%Y_%m_%d_%a_%H:%M:%S_%Z.txt", tm);
-            free_filepath = 1;
-        }
-        else if (argc == 3 && strlen(argv[2]) != 0)
-        {
-            filepath = argv[2];
-            if (strnlen(filepath, max_filepath_size) == max_filepath_size)
-            {
-                die("\"%s\" is too long for file buffer! (what kind of log file "
-                    "path has 420 characters?)");
-            }
-        }
-
-        if (argc > 3)
-            die("usage: dwm [-v][-l|--log [log_file]]\n");
-
-        log_file = fopen(filepath, "w");
-        if (log_file == NULL)
-            die("Error occurred with log file, make sure the user has "
-                "read/write access to the file's directory and/or the "
-                "file.");
-
-        DEBUG_MESSAGE(date_str);
-
-        if (free_filepath)
-            free(filepath);
-        filepath = NULL;
-        return;
+        die("dwm-"VERSION);
     }
-#endif
 
 #ifdef NDEBUG
     die("usage: dwm [-v]");
-#else
-    die("usage: dwm [-v][-l|--log [log_file]]");
+#endif
+
+#ifndef NDEBUG
+    if (!(strcmp("-l", argv[1]) == 0 || strcmp("--log", argv[1]) == 0))
+        die("usage: dwm [-v][-l|--log [log_file]]");
+
+    static const size_t max_filepath_size = 420;
+    char *filepath = NULL;
+    int filepath_buffer_allocated = 0;
+
+    switch(argc)
+    {
+    case 2:
+        filepath = (char*)malloc(max_filepath_size * sizeof(char));
+        if (filepath == NULL)
+            die("Failed to allocate string... How tf?") ;
+
+        time_t t = time(NULL);
+        struct tm *tm = localtime(&t);
+        strftime(filepath, max_filepath_size,
+                 "/tmp/dwm_log-%Y_%m_%d_%a_%H:%M:%S_%Z.txt", tm);
+        filepath_buffer_allocated = 1;
+        break;
+    case 3:
+        if (strlen(argv[2]) == 0)
+        {
+            printf("log_file was empty!");
+            return;
+        }
+
+        filepath = argv[2];
+        if (strnlen(filepath, max_filepath_size) == max_filepath_size)
+        {
+            die("\"%s\" is too long for file path buffer! (what kind of log "
+                "file path has 420 characters?)", filepath);
+        }
+        break;
+    default:
+        die("usage: dwm [-v][-l|--log [log_file]]\n");
+        break;
+    }
+
+    log_file = fopen(filepath, "w");
+    if (log_file == NULL)
+        die("Error occurred with log file, make sure the user has "
+            "read/write access to the file's directory and/or the "
+            "file.");
+
+
+    if (filepath_buffer_allocated)
+    {
+        DEBUG_MESSAGE((strstr(filepath, "-") + 1));
+        free(filepath);
+        filepath = NULL;
+    }
 #endif
 }
 
 int
 main(int argc, char *argv[])
 {
-    handle_opts(argc, (const char**)argv);
+    handle_opts(argc, argv);
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);

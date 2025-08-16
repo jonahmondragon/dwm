@@ -32,10 +32,10 @@ static char *colors[][3] = {
 };
 
 #ifndef NDEBUG
-    extern FILE *log_file = NULL;
-    #define DEBUG_MESSAGE(arg) do { if (log_file != NULL) fprintf(log_file, "%s", (arg)); } while (0)
+    FILE *log_file = NULL;
+    #define DEBUG_MESSAGE(fmt, ...) do { if (log_file != NULL) { fprintf(log_file, fmt, ##__VA_ARGS__); fflush(log_file); }} while (0);
 #else
-    #define DEBUG_MESSAGE(arg) ((void)0)
+    #define DEBUG_MESSAGE(...) ((void)0)
 #endif
 
 typedef struct {
@@ -45,7 +45,7 @@ typedef struct {
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "monospace:size=16", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = {TERMINAL, "-n", "pulsemixer", "-f", "monospace:size=9", "-g", "100x30", "-e", "pulsemixer", NULL };
-const char *spcmd4[] = {"sudo", TERMINAL, "-n", PROCESS_MANAGER, "-f", "monospace:size=9", "-g", "120x34", "-e", PROCESS_MANAGER_PATH, NULL };
+const char *spcmd4[] = {TERMINAL, "-n", PROCESS_MANAGER, "-f", "monospace:size=9", "-g", "120x34", "-e", PROCESS_MANAGER_PATH, NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",        spcmd1},
@@ -176,21 +176,18 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_equal,	spawn,		SHCMD("pamixer --allow-boost -i 5; kill -44 $(pidof dwmblocks)") },
 	{ MODKEY,			XK_BackSpace,	spawn,		SHCMD("sysact") },
 	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("sysact") },
-
-	//{ MODKEY,			XK_Tab,		spawn,		SHCMD("") },
-	// { MODKEY|ShiftMask,		XK_Tab,		spawn,		SHCMD("") },
-
+	{ MODKEY|ShiftMask,		XK_Tab,		spawn,		SHCMD("") },
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY|ShiftMask,		XK_q,		spawn,		SHCMD("sysact") },
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("urls") },
     { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
     { MODKEY|ShiftMask,		XK_e,		spawn, SHCMD("setxkbmap -query | grep \"layout:     us\" ; [ \"$?\" = \"0\" ] && setxkbmap es || setxkbmap us ; remaps") },
-	//{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
     { MODKEY,			XK_r,		toggletagdraw, {0} },
 	{ MODKEY|ShiftMask,			XK_r,	    togglescratch,	{.ui = 3} },
 	{ MODKEY,			XK_t,		setlayout,	{.v = &layouts[0]} }, /* tile */
 	{ MODKEY|ShiftMask,		XK_t,		setlayout,	{.v = &layouts[1]} }, /* bstack */
+	{ ControlMask|ShiftMask,		XK_t,		spawn,	SHCMD("/home/jonah/sc/trw") },
 	{ MODKEY,			XK_y,		setlayout,	{.v = &layouts[2]} }, /* spiral */
 	{ MODKEY|ShiftMask,		XK_y,		setlayout,	{.v = &layouts[3]} }, /* dwindle */
 	{ MODKEY,			XK_u,		setlayout,	{.v = &layouts[4]} }, /* deck */
@@ -202,29 +199,26 @@ static Key keys[] = {
 	{ MODKEY,			XK_p,			spawn,		    SHCMD("media_control toggle") },
 	{ MODKEY|ShiftMask,		XK_p,			spawn,		SHCMD("toggleallmpv") },
     { MODKEY|ControlMask,		XK_p,			spawn,	SHCMD("media_control toggleselect") },
-
+    { ControlMask|ShiftMask,		XK_p,			spawn,	SHCMD("Telegram") },
 	{ MODKEY,			XK_bracketleft,	focusmon,	{.i = -1 } },
 	{ MODKEY|ShiftMask,		XK_bracketleft,	tagmon,		{.i = -1 } },
 	{ MODKEY,			XK_bracketright,	focusmon,	{.i = +1 } },
 	{ MODKEY|ShiftMask,		XK_bracketright,	tagmon,		{.i = +1 } },
-
 	{ MODKEY|ControlMask,			XK_bracketleft,		spawn,		SHCMD("mpc seek -10") },
 	{ MODKEY|ControlMask,			XK_bracketright,	spawn,		SHCMD("mpc seek +10") },
-
 	{ MODKEY,			XK_backslash,		view,		{0} },
-	/* { MODKEY|ShiftMask,		XK_backslash,		spawn,		SHCMD("") }, */
-
+	{ MODKEY|ShiftMask,			XK_backslash,		spawn,		SHCMD("nightlight") },
 	{ MODKEY,			XK_a,		togglegaps,	{0} },
 	{ MODKEY|ShiftMask,		XK_a,		defaultgaps,	{0} },
 	{ MODKEY,			XK_s,		spawndefault,	{0} },
 	{ MODKEY|ShiftMask,			XK_s,		togglesticky,	{0} },
-	/* { MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, */
+	{ MODKEY|ShiftMask,		XK_s,		spawn,		SHCMD("") }, 
+	{ ControlMask|ShiftMask,		XK_s,		spawn,		SHCMD("signal-desktop") }, 
 	{ MODKEY,			XK_d,		spawn,          SHCMD("dmenu_run") },
 	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu") },
 	{ MODKEY|ControlMask|ShiftMask,		XK_d,		spawn,		SHCMD("passmenu --type") },
 	{ MODKEY,			XK_f,		togglefullscr,	{0} },
 	{ MODKEY|ShiftMask,		XK_f,		setlayout,	{.v = &layouts[8]} },
-	/* J and K are automatically bound above in STACKEYS */
 	{ MODKEY,			XK_l,	shiftview,	{ .i = 1 } },
 	{ MODKEY|ShiftMask,		XK_l,	shifttag,	{ .i = 1 } },
 	{ MODKEY,			XK_h,		shiftview,	{ .i = -1 } },
@@ -234,43 +228,27 @@ static Key keys[] = {
 	{ MODKEY,		XK_comma,			spawn, SHCMD("mpc prev") },
 	{ MODKEY,		XK_period,			spawn, SHCMD("mpc next") },
 	{ MODKEY,			XK_apostrophe,	togglescratch,	{.ui = 1} },
-	/* { MODKEY|ShiftMask,		XK_apostrophe,	spawn,		SHCMD("") }, */
+	{ MODKEY|ShiftMask,		XK_apostrophe,	spawn,		SHCMD("") }, 
 	{ MODKEY,			XK_Return,	spawn,		{.v = termcmd } },
 	{ MODKEY|ShiftMask,		XK_Return,	togglescratch,	{.ui = 0} },
 	{ MODKEY|ControlMask,		XK_Return,	spawn,	SHCMD(TERMINAL " -e lf") },
-
 	{ MODKEY,			XK_z,		incrgaps,	{.i = +3 } },
-	/* { MODKEY|ShiftMask,		XK_z,		spawn,		SHCMD("") }, */
+	{ MODKEY|ShiftMask,		XK_z,		spawn,		SHCMD("") }, 
 	{ MODKEY,			XK_x,		incrgaps,	{.i = -3 } },
-	/* { MODKEY|ShiftMask,		XK_x,		spawn,		SHCMD("") }, */
-     { MODKEY,			XK_c,		spawn,		SHCMD("connect_bluetooth") },
-     { MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("disconnect_bluetooth") },
-	/* V is automatically bound above in STACKKEYS */
+	{ MODKEY|ShiftMask,		XK_x,		spawn,		SHCMD("") }, 
+    { MODKEY,			XK_c,		spawn,		SHCMD("connect_bluetooth") },
+    { MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("disconnect_bluetooth") },
 	{ MODKEY,			XK_b,		togglebar,	{0} },
 	{ MODKEY,			XK_n,		spawn,		SHCMD(TERMINAL " -e nvim -c VimwikiIndex") },
 	{ MODKEY|ShiftMask,		XK_n,		spawn,		SHCMD(TERMINAL " -e newsboat; pkill -RTMIN+6 dwmblocks") },
     { MODKEY|ShiftMask|ControlMask,                       XK_n,      togglealttag,   {0} },
 	{ MODKEY,			XK_m,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") },
 	{ MODKEY|ShiftMask,		XK_m,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
-
 	{ MODKEY,			XK_Page_Up,	shiftview,	{ .i = -1 } },
 	{ MODKEY|ShiftMask,		XK_Page_Up,	shifttag,	{ .i = -1 } },
 	{ MODKEY,			XK_Page_Down,	shiftview,	{ .i = +1 } },
 	{ MODKEY|ShiftMask,		XK_Page_Down,	shifttag,	{ .i = +1 } },
 	{ MODKEY,			XK_Insert,	spawn,		SHCMD("snippets") },
-
-    //{ MODKEY|ShiftMask,			XK_F1,		toggletagdraw,		{0} },
-    //{ MODKEY|ShiftMask,			XK_F2,		spawn,		SHCMD("") },
-    ////{ MODKEY|ShiftMask,			XK_F3,		spawn,		SHCMD("displayselect") },
-    //{ MODKEY|ShiftMask,			XK_F4,	togglescratch,	{.ui = 2} },
-    //{ MODKEY|ShiftMask,			XK_F6,		spawn,		SHCMD("torwrap") },
-    ////{ MODKEY|ShiftMask,			XK_F7,		spawn,		SHCMD("") },
-    //{ MODKEY|ShiftMask,			XK_F8,		spawn,		SHCMD("mw -Y") },
-    ////{ MODKEY|ShiftMask,			XK_F9,		spawn,		SHCMD("") },
-    ////{ MODKEY|ShiftMask,			XK_F10,		spawn,		SHCMD("") },
-    //{ MODKEY|ShiftMask,			XK_F11,		spawn,		SHCMD("webcam") },
-    //{ MODKEY|ShiftMask,			XK_F12,		spawn,		SHCMD("remaps & notify-send \\\"⌨️ Keyboard remapping...\\\" \\\"Re-running keyboard defaults for any newly plugged-in keyboards.\\\"") },
-
     { MODKEY,			XK_space,	zoom,		{0} },
     { MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
     { 0,				XK_Print,	spawn,		SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
@@ -278,15 +256,14 @@ static Key keys[] = {
     { MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
     { MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
     { MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
-    //{ 0,			XK_Scroll_Lock,	spawn,		SHCMD("") },
+    { 0,			XK_Scroll_Lock,	spawn,		SHCMD("") },
     { MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
     { 0,    XK_Pause,              spawn,  SHCMD("slock")},
-
-    // Function keys
     { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle suspend")},
     { MODKEY,           XK_F1,  spawn,         SHCMD("elogind-conf toggle hibernation")},
     { MODKEY,           XK_F2,  spawn,         SHCMD("cinema toggle")},
     { MODKEY|ShiftMask, XK_F2,  spawn,         SHCMD("cinema only")},
+    { MODKEY|ControlMask, XK_F2,  spawn,       SHCMD("cinema menu")},
     { MODKEY,           XK_F3,  togglescratch, {.ui = 2}},
     { MODKEY,           XK_F5,  spawn,         SHCMD("cinema -m 3840x2160 toggle ")},
     { MODKEY|ShiftMask, XK_F5,  spawn,         SHCMD("cinema nomirror")},
@@ -351,6 +328,7 @@ static Key keys[] = {
     { 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("brightness up") },
     { 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("brightness down") },
     { 0, XF86XK_RotateWindows,	spawn,		SHCMD("sleep 2s ; rotate-screen") },
+    { 0, XF86XK_Launch2,	spawn,		SHCMD("") },
 
 
 	/* { MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } }, */
@@ -441,6 +419,12 @@ tagall(const Arg *arg)
 	tag(&((Arg){.ui = ~0}));
 }
 
+void
+logtest(const Arg *arg)
+{
+    DEBUG_MESSAGE("What's Really going on?");
+}
+
 /* signal definitions */
 /* signum must be greater than 0 */
 /* trigger signals using `xsetroot -name "fsignal:<signame> [<type> <value>]"` */
@@ -470,4 +454,5 @@ static Signal signals[] = {
 	{ "setlayoutex",    setlayoutex },
     { "xrdb",           xrdb },
     { "pushstack",      pushstack},
+    { "logtest",        logtest}
 };
