@@ -5,6 +5,7 @@
 #define TERMCLASS "St"
 #define PROCESS_MANAGER "PROCESS_MANAGER" // The name of the process manager (btop/htop) scratchpad and to disable swallow.
 #define PROCESS_MANAGER_PATH "/usr/local/bin/btop"
+#define SESSION_FILE "/tmp/dwm-session" // file to restore window positions from after a renew
 
 /* appearance */
 static unsigned int borderpx  = 3;        /* border pixel of windows */

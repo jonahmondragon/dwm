@@ -4,6 +4,8 @@
 #define TERMINAL "st"
 #define TERMCLASS "St"
 
+#define SESSION_FILE "/tmp/dwm-session"
+
 /* appearance */
 static unsigned int borderpx  = 3;        /* border pixel of windows */
 static unsigned int snap      = 32;       /* snap pixel */
