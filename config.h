@@ -245,6 +245,7 @@ static Key keys[] = {
     { MODKEY|ShiftMask|ControlMask,                       XK_n,      togglealttag,   {0} },
 	{ MODKEY,			XK_m,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") },
 	{ MODKEY|ShiftMask,		XK_m,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
+	{ ControlMask|ShiftMask,		XK_m,	spawn,		SHCMD("urls markets.txt && urls exchanges.txt") },
 	{ MODKEY,			XK_Page_Up,	shiftview,	{ .i = -1 } },
 	{ MODKEY|ShiftMask,		XK_Page_Up,	shifttag,	{ .i = -1 } },
 	{ MODKEY,			XK_Page_Down,	shiftview,	{ .i = +1 } },
